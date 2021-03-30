@@ -1,18 +1,17 @@
+/* eslint-disable vue/require-default-prop */
 
 <template>
-  <Helloworld msg="topeeee" />
+  <h1>{{ msg }}</h1>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import Helloworld from '@/main/components/helloworld.vue'
 
 export default defineComponent({
-  name: 'App',
-  components: {
-    Helloworld
+  name: 'Helloworld',
+  props: {
+    msg: String
   }
-
 })
 </script>
 

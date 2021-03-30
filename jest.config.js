@@ -1,6 +1,6 @@
 
 module.exports = {
-  preset: '@vue/cli-plugin-unit-jest',
+  // preset: '@vue/cli-plugin-unit-jest',
   roots: ["<rootDir>/tests"],
   collectCoverageFrom: [
       "<rootDir>/src/**/*.ts",
@@ -14,7 +14,7 @@ module.exports = {
     testEnvironment: "jsdom",
     transform: {
       "^.+\\.ts$": "ts-jest",
-      // ".*\\.(vue)$": "vue-jest"
+      '^.+\\.vue$': "vue-jest"
     },
     moduleNameMapper: {
       "@/tests/(.*)": "<rootDir>/tests/$1",
