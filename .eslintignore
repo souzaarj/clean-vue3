@@ -1,0 +1,8 @@
+node_modules
+.vscode
+coverage
+.eslintcache
+public
+*.scss
+webpack.config.js
+jest.config.js

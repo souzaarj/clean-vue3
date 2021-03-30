@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "rootDirs": ["src", "tests"],
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["*"],
+      "@/tests/*":["../tests/*"]
+    },
+    "allowJs": true,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.vue",
+    "tests/**/*.ts",
+    "tests/**/*.vue"
+  ],
+   "exclude": [
+    "./node_modules"
+  ]
+}
