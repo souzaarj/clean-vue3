@@ -1,5 +1,5 @@
 <template>
-  <h1>{{ msg }}</h1>
+  <h1 data-testid="test-msg">{{ msg }}</h1>
 </template>
 
 <script lang="ts">
@@ -19,5 +19,9 @@
 <style lang="scss" scoped>
   h1 {
     color: red;
+  }
+
+  .text * {
+    top: calc(1em + 2em);
   }
 </style>

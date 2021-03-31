@@ -1,9 +1,10 @@
- {
+{
   "root": true,
   "env": {
     "browser": true,
     "node": true
   },
+  // "parser": "@typescript-eslint/parser",
   "extends": [
     "plugin:vue/vue3-recommended",
     "eslint:recommended",
@@ -13,7 +14,7 @@
   ],
   "parserOptions": {
     "ecmaVersion": "2021",
-    // project: "./tsconfig.json"
+    "project": "./tsconfig.json"
   },
   "rules": {
     // 'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
@@ -21,6 +22,3 @@
     // "vue/html-self-closing": "off"
   }
 }
-
-
-
