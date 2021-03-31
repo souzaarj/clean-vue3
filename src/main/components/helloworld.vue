@@ -1,22 +1,23 @@
-/* eslint-disable vue/require-default-prop */
-
 <template>
   <h1>{{ msg }}</h1>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+  import { defineComponent } from 'vue'
 
-export default defineComponent({
-  name: 'Helloworld',
-  props: {
-    msg: String
-  }
-})
+  export default defineComponent({
+    name: 'Helloworld',
+    props: {
+      msg: {
+        type: String,
+        required: true
+      }
+    }
+  })
 </script>
 
 <style lang="scss" scoped>
-  h1{
+  h1 {
     color: red;
   }
 </style>
