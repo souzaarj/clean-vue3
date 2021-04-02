@@ -10,7 +10,8 @@
     "test": "jest --passWithNoTests --runInBand --no-cache",
     "test:watch": "npm test -- --watchAll",
     "test:staged": "npm test -- -o",
-    "test:ci": "npm test -- --coverage"
+    "test:ci": "npm test -- --coverage",
+    "prepare": "husky install"
   },
   "main": "index.js",
   "dependencies": {
@@ -52,7 +53,6 @@
     "prettier": "^1.19.1",
     "sass": "^1.32.8",
     "sass-loader": "^11.0.1",
-    "simple-git-hooks": "^2.2.0",
     "style-loader": "^2.0.0",
     "stylelint": "^13.12.0",
     "stylelint-config-recommended": "^4.0.0",
@@ -68,18 +68,14 @@
   },
   "keywords": [],
   "license": "ISC",
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "npm test:ci"
-    }
-  },
   "lint-staged": {
     "*.{ts,vue}": [
       "eslint . --cache --fix",
       "npm run test:staged"
     ],
     "*.{css,scss,vue}": "stylelint --fix",
-    "*": "prettier -w -u"
+    "*": "prettier -w -u",
+    "*.js": "eslint --cache --fix",
+    "*.css": "stylelint --fix"
   }
 }
