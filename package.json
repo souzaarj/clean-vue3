@@ -70,12 +70,9 @@
   "license": "ISC",
   "lint-staged": {
     "*.{ts,vue}": [
-      "eslint . --cache --fix",
-      "npm run test:staged"
-    ],
-    "*.{css,scss,vue}": "stylelint --fix",
-    "*": "prettier -w -u",
-    "*.js": "eslint --cache --fix",
-    "*.css": "stylelint --fix"
+      "eslint --cache --fix",
+      "npm run test:staged",
+      "pretty-quick --staged"
+    ]
   }
 }
