@@ -6,3 +6,5 @@ public
 *.scss
 webpack.config.js
 jest.config.js
+public/js/bundle.js
+webpack.config.js
