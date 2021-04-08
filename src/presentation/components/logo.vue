@@ -11,5 +11,3 @@
     name: 'Logo',
   })
 </script>
-
-<style lang="scss" scoped></style>
