@@ -10,14 +10,14 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'public/js'),
     publicPath: '/public/js',
-    filename: 'bundle.js'
+    filename: 'bundle.js',
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', 'scss', 'css', 'vue'],
     alias: {
       '@': path.join(__dirname, 'src'),
-      vue: '@vue/runtime-dom'
-    }
+      vue: '@vue/runtime-dom',
+    },
   },
   module: {
     rules: [
@@ -25,15 +25,15 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
-          hotReload: true
-        }
+          hotReload: true,
+        },
       },
       {
         test: /\.ts$/,
         loader: 'ts-loader',
         options: {
-          appendTsSuffixTo: [/\.vue$/]
-        }
+          appendTsSuffixTo: [/\.vue$/],
+        },
       },
       {
         test: /\.s[ac]ss$/i,
@@ -45,27 +45,36 @@ module.exports = {
             options: {
               implementation: require('sass'),
               sassOptions: {
-                fiber: require('fibers')
-              }
-            }
-          }
-        ]
-      }
-    ]
+                fiber: require('fibers'),
+              },
+            },
+          },
+          {
+            loader: 'sass-resources-loader',
+            options: {
+              // Provide path to the file with resources
+              resources: [
+                './src/presentation/styles/colors.scss',
+                './src/presentation/styles/global.scss',
+              ],
+            },
+          },
+        ],
+      },
+    ],
   },
   devServer: {
     contentBase: path.join(__dirname, 'public'),
     historyApiFallback: true,
     writeToDisk: true,
     liveReload: true,
-    hot: true
-
+    hot: true,
   },
   plugins: [
     new CleanWebpackPlugin(),
     new DefinePlugin({
-      'process.env.API_URL': 'http://localhost:5050/api/'
+      'process.env.API_URL': 'http://localhost:5050/api/',
     }),
-    new VueLoaderPlugin()
-  ]
+    new VueLoaderPlugin(),
+  ],
 }

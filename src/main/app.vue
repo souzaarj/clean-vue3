@@ -1,16 +1,16 @@
 <template>
-  <Helloworld msg="topeeee" />
+  <Login />
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import Helloworld from '@/main/components/helloworld.vue'
+  import Login from '@/presentation/pages/login/login.vue'
 
   export default defineComponent({
     name: 'App',
     components: {
-      Helloworld
-    }
+      Login,
+    },
   })
 </script>
 
