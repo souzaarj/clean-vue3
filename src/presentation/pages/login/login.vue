@@ -21,10 +21,7 @@
       </div>
       <button class="btn login__button" type="button">Entrar</button>
       <span class="login__link">Criar conta</span>
-      <div class="login__error-wrap">
-        <Spinner class="login__spinner" />
-        <span class="login__error">Erro</span>
-      </div>
+      <FormStatus />
     </form>
     <Footer />
   </div>
@@ -35,7 +32,7 @@
   import {
     LoginHeader as Header,
     Input,
-    Spinner,
+    FormStatus,
     Footer,
   } from '@/presentation/components'
 
@@ -43,8 +40,9 @@
     name: 'Login',
     components: {
       Header,
-      Spinner,
+      FormStatus,
       Footer,
+      Input,
     },
   })
 </script>
@@ -106,21 +104,6 @@
       &:hover {
         text-decoration: underline;
       }
-    }
-
-    &__error-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    &__spinner {
-      margin-top: 30px;
-    }
-
-    &__error {
-      margin-top: 30px;
-      color: $primaryLight;
     }
   }
 </style>

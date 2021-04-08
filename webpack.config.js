@@ -68,7 +68,8 @@ module.exports = {
     historyApiFallback: true,
     writeToDisk: true,
     liveReload: true,
-    hot: true,
+    // hot: true,
+    inline: true,
   },
   plugins: [
     new CleanWebpackPlugin(),
