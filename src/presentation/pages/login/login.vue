@@ -92,6 +92,7 @@
 
     &__button {
       margin-top: 32px;
+      outline: none;
     }
 
     &__link {

@@ -24,6 +24,11 @@
 
 <style lang="scss">
   .input {
+    border: 1px solid $primaryLight;
+    line-height: 40px;
+    border-radius: 4px;
+    padding: 0 40px 0 8px;
+
     &:focus {
       outline-color: $primaryLight;
     }
