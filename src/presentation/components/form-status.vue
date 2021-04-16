@@ -1,7 +1,7 @@
 <template>
-  <div class="status-wrap">
-    <Spinner class="status-wrap__spinner" />
-    <span class="status-wrap__error">Error</span>
+  <div data-testid="status-wrap" class="status-wrap">
+    <Spinner v-if="loading" class="status-wrap__spinner" />
+    <span v-if="error" class="status-wrap__error">Error</span>
   </div>
 </template>
 
@@ -13,6 +13,16 @@
     name: 'FormStatus',
     components: {
       Spinner,
+    },
+    props: {
+      loading: {
+        type: Boolean,
+        default: false,
+      },
+      error: {
+        type: String,
+        default: '',
+      },
     },
   })
 </script>

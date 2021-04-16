@@ -21,14 +21,14 @@
       </div>
       <button class="btn login__button" type="button">Entrar</button>
       <span class="login__link">Criar conta</span>
-      <FormStatus />
+      <FormStatus :loading="isLoading" :error="errorMessage" />
     </form>
     <Footer />
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue'
+  import { ref, defineComponent } from 'vue'
   import {
     LoginHeader as Header,
     Input,
@@ -43,6 +43,14 @@
       FormStatus,
       Footer,
       Input,
+    },
+    setup() {
+      const isLoading = ref(false)
+      const errorMessage = ref('')
+      return {
+        isLoading,
+        errorMessage,
+      }
     },
   })
 </script>
