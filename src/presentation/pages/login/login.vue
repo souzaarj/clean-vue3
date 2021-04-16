@@ -19,7 +19,7 @@
         />
         <span class="login__status">🔴</span>
       </div>
-      <button class="btn login__button" type="button">Entrar</button>
+      <button class="btn login__button" disabled type="button">Entrar</button>
       <span class="login__link">Criar conta</span>
       <FormStatus :loading="isLoading" :error="errorMessage" />
     </form>
@@ -101,6 +101,16 @@
     &__button {
       margin-top: 32px;
       outline: none;
+
+      &:disabled {
+        background: $disabledBackground;
+        color: $disabledColor;
+
+        &:hover {
+          opacity: 1;
+          cursor: unset;
+        }
+      }
     }
 
     &__link {
