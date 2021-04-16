@@ -19,7 +19,13 @@
         />
         <span class="login__status">🔴</span>
       </div>
-      <button class="btn login__button" disabled type="button">Entrar</button>
+      <button
+        class="btn login__button"
+        :disabled="buttonIsDisabled"
+        type="button"
+      >
+        Entrar
+      </button>
       <span class="login__link">Criar conta</span>
       <FormStatus :loading="isLoading" :error="errorMessage" />
     </form>
@@ -28,7 +34,7 @@
 </template>
 
 <script lang="ts">
-  import { ref, defineComponent } from 'vue'
+  import { ref, defineComponent, computed } from 'vue'
   import {
     LoginHeader as Header,
     Input,
@@ -47,9 +53,14 @@
     setup() {
       const isLoading = ref(false)
       const errorMessage = ref('')
+      const buttonIsDisabled = computed(() => {
+        return true
+      })
+
       return {
         isLoading,
         errorMessage,
+        buttonIsDisabled,
       }
     },
   })
