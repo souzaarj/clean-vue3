@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  import { defineComponent, computed } from 'vue'
+  import { defineComponent, computed, inject } from 'vue'
 
   export default defineComponent({
     name: 'Input',
@@ -34,7 +34,7 @@
     },
     setup() {
       const getStatus = computed(() => '🔴')
-
+      const stateLogin = inject('stateLogin')
       return {
         getStatus,
       }

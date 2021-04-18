@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-  import { ref, defineComponent, computed } from 'vue'
+  import { ref, defineComponent, computed, provide } from 'vue'
   import {
     LoginHeader as Header,
     Input,
@@ -48,6 +48,8 @@
       const isLoading = ref(false)
       const errorMessage = ref('')
       const buttonIsDisabled = computed(() => true)
+
+      provide('stateLogin', { isLoading, errorMessage })
 
       return {
         isLoading,
