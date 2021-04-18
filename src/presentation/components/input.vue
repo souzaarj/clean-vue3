@@ -1,5 +1,13 @@
 <template>
-  <input class="input" type="{type}" placeholder="{placeHolder}" />
+  <div class="input-wrap">
+    <input class="input-wrap__input" :type="type" :placeholder="placeHolder" />
+    <span
+      :data-testid="type + '-status'"
+      :title="title"
+      class="input-wrap__status"
+      >{{ getStatus }}</span
+    >
+  </div>
 </template>
 
 <script>
@@ -10,7 +18,7 @@
     props: {
       type: {
         type: String,
-        default: 'text',
+        default: '',
         required: true,
       },
       placeHolder: {
@@ -18,19 +26,44 @@
         default: '',
         required: false,
       },
+      title: {
+        type: String,
+        default: '',
+        required: false,
+      },
+    },
+    computed: {
+      getStatus() {
+        return '🔴'
+      },
     },
   })
 </script>
 
 <style lang="scss">
-  .input {
-    border: 1px solid $primaryLight;
-    line-height: 40px;
-    border-radius: 4px;
-    padding: 0 40px 0 8px;
+  .input-wrap {
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+    position: relative;
 
-    &:focus {
-      outline-color: $primaryLight;
+    &__input {
+      flex-grow: 1;
+      border: 1px solid $primaryLight;
+      line-height: 40px;
+      border-radius: 4px;
+      padding: 0 40px 0 8px;
+
+      &:focus {
+        outline-color: $primaryLight;
+      }
+    }
+
+    &__status {
+      position: absolute;
+      right: 8px;
+      font-size: 12px;
+      cursor: help;
     }
   }
 </style>

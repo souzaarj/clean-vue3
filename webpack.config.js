@@ -1,6 +1,6 @@
 const path = require('path')
 
-const { VueLoaderPlugin, default: loader } = require('vue-loader')
+const { VueLoaderPlugin } = require('vue-loader')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const { DefinePlugin } = require('webpack')
 
@@ -16,7 +16,7 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js', 'scss', 'css', 'vue'],
     alias: {
       '@': path.join(__dirname, 'src'),
-      vue: '@vue/runtime-dom',
+      // vue: '@vue/runtime-dom',
     },
   },
   module: {
@@ -24,9 +24,9 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-        options: {
-          hotReload: true,
-        },
+        // options: {
+        //   hotReload: true,
+        // },
       },
       {
         test: /\.ts$/,
@@ -75,6 +75,8 @@ module.exports = {
     new CleanWebpackPlugin(),
     new DefinePlugin({
       'process.env.API_URL': 'http://localhost:5050/api/',
+      __VUE_OPTIONS_API__: false,
+      __VUE_PROD_DEVTOOLS__: false,
     }),
     new VueLoaderPlugin(),
   ],

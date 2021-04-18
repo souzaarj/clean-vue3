@@ -1,7 +1,7 @@
 <template>
   <div data-testid="status-wrap" class="status-wrap">
-    <Spinner v-if="loading" class="status-wrap__spinner" />
-    <span v-if="error" class="status-wrap__error">Error</span>
+    <Spinner v-if="isLoading" class="status-wrap__spinner" />
+    <span v-if="errorMessage" class="status-wrap__error">Error</span>
   </div>
 </template>
 
@@ -15,11 +15,11 @@
       Spinner,
     },
     props: {
-      loading: {
+      isLoading: {
         type: Boolean,
         default: false,
       },
-      error: {
+      errorMessage: {
         type: String,
         default: '',
       },

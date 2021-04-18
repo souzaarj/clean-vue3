@@ -3,22 +3,16 @@
     <Header title="4Dev - Enquetes para Programadores" />
     <form class="login__form" action="">
       <h2 class="login__subTitle">Login</h2>
-      <div class="login__wrap">
-        <Input
-          class="input login__input"
-          type="email"
-          placeholder="Digite seu e-mail"
-        />
-        <span class="login__status">🔴</span>
-      </div>
-      <div class="login__wrap">
-        <Input
-          class="input login__input"
-          type="password"
-          placeholder="Digite sua senha"
-        />
-        <span class="login__status">🔴</span>
-      </div>
+      <Input
+        type="email"
+        place-holder="Digite seu e-mail"
+        title="Campo obrigatório"
+      />
+      <Input
+        type="password"
+        place-holder="Digite sua senha"
+        title="Campo obrigatório"
+      />
       <button
         class="btn login__button"
         :disabled="buttonIsDisabled"
@@ -89,24 +83,6 @@
       text-align: center;
       font-size: 20px;
       text-transform: uppercase;
-    }
-
-    &__wrap {
-      display: flex;
-      align-items: center;
-      margin-top: 16px;
-      position: relative;
-    }
-
-    &__input {
-      flex-grow: 1;
-    }
-
-    &__status {
-      position: absolute;
-      right: 8px;
-      font-size: 12px;
-      cursor: help;
     }
 
     &__button {
