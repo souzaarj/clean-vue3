@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  import { defineComponent } from 'vue'
+  import { defineComponent, computed } from 'vue'
 
   export default defineComponent({
     name: 'Input',
@@ -32,10 +32,12 @@
         required: false,
       },
     },
-    computed: {
-      getStatus() {
-        return '🔴'
-      },
+    setup() {
+      const getStatus = computed(() => '🔴')
+
+      return {
+        getStatus,
+      }
     },
   })
 </script>

@@ -47,9 +47,7 @@
     setup() {
       const isLoading = ref(false)
       const errorMessage = ref('')
-      const buttonIsDisabled = computed(() => {
-        return true
-      })
+      const buttonIsDisabled = computed(() => true)
 
       return {
         isLoading,
