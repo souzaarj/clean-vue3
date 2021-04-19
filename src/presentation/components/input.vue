@@ -2,6 +2,7 @@
   <div class="input-wrap">
     <input
       class="input-wrap__input"
+      :name="name"
       :type="type"
       :placeholder="placeHolder"
       :value="modelValue"
@@ -22,6 +23,11 @@
   export default defineComponent({
     name: 'Input',
     props: {
+      name: {
+        type: String,
+        default: '',
+        required: false,
+      },
       type: {
         type: String,
         default: '',
@@ -47,12 +53,8 @@
       const getStatus = computed(() => '🔴')
       const stateLogin = inject('stateLogin')
 
-      const handleChange = (event) => {
-        console.log(event.target.value)
-      }
       return {
         getStatus,
-        handleChange,
       }
     },
   })

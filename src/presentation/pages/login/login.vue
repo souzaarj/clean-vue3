@@ -1,25 +1,23 @@
 <template>
   <div class="login">
     <Header title="4Dev - Enquetes para Programadores" />
-    <form class="login__form" action="">
+    <form class="login__form" @submit.prevent="onSubmit">
       <h2 class="login__subTitle">Login</h2>
       <Input
         v-model="email"
+        name="email"
         type="email"
         place-holder="Digite seu e-mail"
         title="Campo obrigatório"
       />
       <Input
         v-model="password"
+        name="password"
         type="password"
         place-holder="Digite sua senha"
         title="Campo obrigatório"
       />
-      <button
-        class="btn login__button"
-        :disabled="buttonIsDisabled"
-        type="button"
-      >
+      <button class="btn login__button" :disabled="buttonIsDisabled">
         Entrar
       </button>
       <span class="login__link">Criar conta</span>
@@ -63,6 +61,7 @@
       provide('stateLogin', { isLoading, errorMessage })
 
       watch(email, (newValue) => props.validation.validate({ email: newValue }))
+
       watch(password, (newValue) =>
         props.validation.validate({ password: newValue })
       )
