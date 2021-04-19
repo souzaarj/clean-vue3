@@ -60,10 +60,10 @@
 
       provide('stateLogin', { isLoading, errorMessage })
 
-      watch(email, (newValue) => props.validation.validate({ email: newValue }))
+      watch(email, (newValue) => props.validation.validate('email', newValue))
 
       watch(password, (newValue) =>
-        props.validation.validate({ password: newValue })
+        props.validation.validate('password', newValue)
       )
 
       return {
