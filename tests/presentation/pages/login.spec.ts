@@ -1,13 +1,25 @@
+import { Validation } from '@/presentation/protocols/validation'
 import { Login } from '@/presentation/pages'
-import { render, RenderResult } from '@testing-library/vue'
+import { render, RenderResult, fireEvent } from '@testing-library/vue'
 
 type SutTypes = {
   sut: RenderResult
+  validationSpy: ValidationSpy
+}
+
+class ValidationSpy implements Validation {
+  input: any
+  errorMessage = ''
+  validate(input: any): string {
+    this.input = input
+    return this.errorMessage
+  }
 }
 
 const makeSut = (): SutTypes => {
-  const sut = render(Login)
-  return { sut }
+  const validationSpy = new ValidationSpy()
+  const sut = render(Login, { props: { validation: validationSpy } })
+  return { sut, validationSpy }
 }
 
 describe('Login', () => {
@@ -31,5 +43,19 @@ describe('Login', () => {
 
     expect(passwordStatus.title).toBe('Campo obrigatório')
     expect(passwordStatus.textContent).toBe('🔴')
+  })
+
+  test('should call validation with correct email', async () => {
+    const { sut, validationSpy } = makeSut()
+    const emailInput = sut.getByPlaceholderText('Digite seu e-mail')
+    await fireEvent.update(emailInput, 'any_email')
+    expect(validationSpy.input).toEqual({ email: 'any_email' })
+  })
+
+  test('should call validation with correct password', async () => {
+    const { sut, validationSpy } = makeSut()
+    const passwordInput = sut.getByPlaceholderText('Digite sua senha')
+    await fireEvent.update(passwordInput, 'any_password')
+    expect(validationSpy.input).toEqual({ password: 'any_password' })
   })
 })
