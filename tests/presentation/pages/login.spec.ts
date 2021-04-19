@@ -1,21 +1,10 @@
-import { Validation } from '@/presentation/protocols/validation'
 import { Login } from '@/presentation/pages'
 import { render, RenderResult, fireEvent } from '@testing-library/vue'
+import { ValidationSpy } from '@/tests/presentation/mocks/'
 
 type SutTypes = {
   sut: RenderResult
   validationSpy: ValidationSpy
-}
-
-class ValidationSpy implements Validation {
-  fieldName = ''
-  fieldValue = ''
-  errorMessage = ''
-  validate(fieldName: string, fieldValue: string): string {
-    this.fieldName = fieldName
-    this.fieldValue = fieldValue
-    return this.errorMessage
-  }
 }
 
 const makeSut = (): SutTypes => {
