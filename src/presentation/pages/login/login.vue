@@ -10,6 +10,7 @@
         title="Campo obrigatório"
       />
       <Input
+        v-model="password"
         type="password"
         place-holder="Digite sua senha"
         title="Campo obrigatório"
@@ -56,17 +57,22 @@
       const isLoading = ref(false)
       const errorMessage = ref('')
       const email = ref('')
+      const password = ref('')
       const buttonIsDisabled = computed(() => true)
 
       provide('stateLogin', { isLoading, errorMessage })
 
       watch(email, (newValue) => props.validation.validate({ email: newValue }))
+      watch(password, (newValue) =>
+        props.validation.validate({ password: newValue })
+      )
 
       return {
         isLoading,
         errorMessage,
         buttonIsDisabled,
         email,
+        password,
       }
     },
   })
