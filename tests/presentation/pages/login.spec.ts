@@ -1,6 +1,7 @@
 import { Login } from '@/presentation/pages'
 import { render, RenderResult, fireEvent } from '@testing-library/vue'
 import { ValidationSpy } from '@/tests/presentation/mocks/'
+import faker from 'faker'
 
 type SutTypes = {
   sut: RenderResult
@@ -39,16 +40,18 @@ describe('Login', () => {
   test('should call validation with correct email', async () => {
     const { sut, validationSpy } = makeSut()
     const emailInput = sut.getByPlaceholderText('Digite seu e-mail')
-    await fireEvent.update(emailInput, 'any_email')
+    const email = faker.internet.email()
+    await fireEvent.update(emailInput, email)
     expect(validationSpy.fieldName).toBe('email')
-    expect(validationSpy.fieldValue).toBe('any_email')
+    expect(validationSpy.fieldValue).toBe(email)
   })
 
   test('should call validation with correct password', async () => {
     const { sut, validationSpy } = makeSut()
+    const password = faker.internet.email()
     const passwordInput = sut.getByPlaceholderText('Digite sua senha')
-    await fireEvent.update(passwordInput, 'any_password')
+    await fireEvent.update(passwordInput, password)
     expect(validationSpy.fieldName).toBe('password')
-    expect(validationSpy.fieldValue).toBe('any_password')
+    expect(validationSpy.fieldValue).toBe(password)
   })
 })
