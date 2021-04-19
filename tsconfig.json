@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "esnext",
+    "strict": true,
     "lib": ["dom", "dom.iterable", "esnext"],
     "esModuleInterop": true,
     "module": "esnext",

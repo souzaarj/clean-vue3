@@ -1,6 +1,12 @@
 <template>
   <div class="input-wrap">
-    <input class="input-wrap__input" :type="type" :placeholder="placeHolder" />
+    <input
+      class="input-wrap__input"
+      :type="type"
+      :placeholder="placeHolder"
+      :value="modelValue"
+      @input="$emit('update:modelValue', $event.target.value)"
+    />
     <span
       :data-testid="type + '-status'"
       :title="title"
@@ -31,12 +37,22 @@
         default: '',
         required: false,
       },
+      modelValue: {
+        type: String,
+        default: '',
+        required: false,
+      },
     },
     setup() {
       const getStatus = computed(() => '🔴')
       const stateLogin = inject('stateLogin')
+
+      const handleChange = (event) => {
+        console.log(event.target.value)
+      }
       return {
         getStatus,
+        handleChange,
       }
     },
   })
@@ -69,3 +85,5 @@
     }
   }
 </style>
+
+},

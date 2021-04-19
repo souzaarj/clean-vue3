@@ -4,6 +4,7 @@
     <form class="login__form" action="">
       <h2 class="login__subTitle">Login</h2>
       <Input
+        v-model="email"
         type="email"
         place-holder="Digite seu e-mail"
         title="Campo obrigatório"
@@ -28,7 +29,8 @@
 </template>
 
 <script lang="ts">
-  import { ref, defineComponent, computed, provide } from 'vue'
+  import { ref, defineComponent, computed, provide, PropType, watch } from 'vue'
+  import { Validation } from '@/presentation/protocols/validation'
   import {
     LoginHeader as Header,
     Input,
@@ -44,17 +46,27 @@
       Footer,
       Input,
     },
-    setup() {
+    props: {
+      validation: {
+        type: Object as PropType<Validation>,
+        required: true,
+      },
+    },
+    setup(props) {
       const isLoading = ref(false)
       const errorMessage = ref('')
+      const email = ref('')
       const buttonIsDisabled = computed(() => true)
 
       provide('stateLogin', { isLoading, errorMessage })
+
+      watch(email, (newValue) => props.validation.validate({ email: newValue }))
 
       return {
         isLoading,
         errorMessage,
         buttonIsDisabled,
+        email,
       }
     },
   })
