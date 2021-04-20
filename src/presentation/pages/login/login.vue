@@ -8,20 +8,20 @@
         name="email"
         type="email"
         place-holder="Digite seu e-mail"
-        title="Campo obrigatório"
+        :title="emailError"
       />
       <Input
         v-model="password"
         name="password"
         type="password"
         place-holder="Digite sua senha"
-        title="Campo obrigatório"
+        :title="passwordError"
       />
       <button class="btn login__button" :disabled="buttonIsDisabled">
         Entrar
       </button>
       <span class="login__link">Criar conta</span>
-      <FormStatus :loading="isLoading" :error="errorMessage" />
+      <FormStatus :loading="isLoading" :error="mainError" />
     </form>
     <Footer />
   </div>
@@ -53,14 +53,20 @@
     },
     setup(props) {
       const isLoading = ref(false)
-      const errorMessage = ref('')
+      const mainError = ref('')
+      const emailError = ref('Campo obrigatório')
+      const passwordError = ref('Campo obrigatório')
       const email = ref('')
       const password = ref('')
       const buttonIsDisabled = computed(() => true)
 
-      provide('stateLogin', { isLoading, errorMessage })
+      provide('stateLogin', { isLoading, mainError })
 
-      watch(email, (newValue) => props.validation.validate('email', newValue))
+      watch(
+        email,
+        (newValue) =>
+          (emailError.value = props.validation.validate('email', newValue))
+      )
 
       watch(password, (newValue) =>
         props.validation.validate('password', newValue)
@@ -68,10 +74,12 @@
 
       return {
         isLoading,
-        errorMessage,
+        mainError,
         buttonIsDisabled,
         email,
         password,
+        emailError,
+        passwordError,
       }
     },
   })
