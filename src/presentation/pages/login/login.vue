@@ -77,6 +77,10 @@
           ))
       )
 
+      const onSubmit = (): void => {
+        isLoading.value = true
+      }
+
       return {
         isLoading,
         mainError,
@@ -85,6 +89,7 @@
         password,
         emailError,
         passwordError,
+        onSubmit,
       }
     },
   })
