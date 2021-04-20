@@ -8,14 +8,12 @@
         name="email"
         type="email"
         place-holder="Digite seu e-mail"
-        :title="emailError"
       />
       <Input
         v-model="password"
         name="password"
         type="password"
         place-holder="Digite sua senha"
-        :title="passwordError"
       />
       <button class="btn login__button" :disabled="buttonIsDisabled">
         Entrar
@@ -60,7 +58,7 @@
       const password = ref('')
       const buttonIsDisabled = computed(() => true)
 
-      provide('stateLogin', { isLoading, mainError })
+      provide('stateLogin', { isLoading, mainError, emailError, passwordError })
 
       watch(
         email,

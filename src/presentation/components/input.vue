@@ -10,7 +10,7 @@
     />
     <span
       :data-testid="type + '-status'"
-      :title="title"
+      :title="getTitle"
       class="input-wrap__status"
       >{{ getStatus }}</span
     >
@@ -38,23 +38,21 @@
         default: '',
         required: false,
       },
-      title: {
-        type: String,
-        default: '',
-        required: false,
-      },
       modelValue: {
         type: String,
         default: '',
         required: false,
       },
     },
-    setup() {
-      const getStatus = computed(() => '🔴')
+    setup(props) {
       const stateLogin = inject('stateLogin')
+      const error = stateLogin[`${props.name}Error`]
+      const getStatus = computed(() => (error.value ? '🔴' : '🟢'))
+      const getTitle = computed(() => error.value || 'Tudo certo!')
 
       return {
         getStatus,
+        getTitle,
       }
     },
   })
