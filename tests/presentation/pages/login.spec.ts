@@ -23,7 +23,7 @@ describe('Login', () => {
     expect(statusWrap.childElementCount).toBe(0)
 
     const submitButton = sut.getByText('Entrar') as HTMLButtonElement
-    expect(submitButton.disabled).toBe(true)
+    expect(submitButton.disabled).toBeTruthy()
 
     const emailStatus = sut.getByTestId('email-status')
 
@@ -94,5 +94,18 @@ describe('Login', () => {
     const passwordStatus = sut.getByTestId('password-status')
     expect(passwordStatus.title).toBe('Tudo certo!')
     expect(passwordStatus.textContent).toBe('🟢')
+  })
+  test('should enable submit button if form is valid', async () => {
+    const { sut, validationSpy } = makeSut()
+    validationSpy.errorMessage = ''
+    const password = faker.internet.password()
+    const passwordInput = sut.getByPlaceholderText('Digite sua senha')
+    await fireEvent.update(passwordInput, password)
+    const email = faker.internet.email()
+    const emailInput = sut.getByPlaceholderText('Digite seu e-mail')
+    await fireEvent.update(emailInput, email)
+    const submitButton = sut.getByText('Entrar') as HTMLButtonElement
+
+    expect(submitButton.disabled).toBeFalsy()
   })
 })
