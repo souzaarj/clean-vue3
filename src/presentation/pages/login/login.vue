@@ -56,7 +56,9 @@
       const passwordError = ref('Campo obrigatório')
       const email = ref('')
       const password = ref('')
-      const buttonIsDisabled = computed(() => true)
+      const buttonIsDisabled = computed(
+        () => !!emailError.value || !!passwordError.value
+      )
 
       provide('stateLogin', { isLoading, mainError, emailError, passwordError })
 

@@ -38,6 +38,11 @@
         default: '',
         required: false,
       },
+      msgError: {
+        type: String,
+        default: '',
+        required: false,
+      },
       modelValue: {
         type: String,
         default: '',
