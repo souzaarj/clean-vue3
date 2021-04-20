@@ -10,6 +10,7 @@ type SutTypes = {
 
 const makeSut = (): SutTypes => {
   const validationSpy = new ValidationSpy()
+  validationSpy.errorMessage = faker.random.words()
   const sut = render(Login, { props: { validation: validationSpy } })
   return { sut, validationSpy }
 }
@@ -24,14 +25,12 @@ describe('Login', () => {
     const submitButton = sut.getByText('Entrar') as HTMLButtonElement
     expect(submitButton.disabled).toBe(true)
 
-    const emailStatus = sut.getByTestId('email-status') as HTMLButtonElement
+    const emailStatus = sut.getByTestId('email-status')
 
     expect(emailStatus.title).toBe('Campo obrigatório')
     expect(emailStatus.textContent).toBe('🔴')
 
-    const passwordStatus = sut.getByTestId(
-      'password-status'
-    ) as HTMLButtonElement
+    const passwordStatus = sut.getByTestId('password-status')
 
     expect(passwordStatus.title).toBe('Campo obrigatório')
     expect(passwordStatus.textContent).toBe('🔴')
@@ -53,5 +52,15 @@ describe('Login', () => {
     await fireEvent.update(passwordInput, password)
     expect(validationSpy.fieldName).toBe('password')
     expect(validationSpy.fieldValue).toBe(password)
+  })
+
+  test('should show email if validation fails', async () => {
+    const { sut, validationSpy } = makeSut()
+    const email = faker.internet.email()
+    const emailInput = sut.getByPlaceholderText('Digite seu e-mail')
+    await fireEvent.update(emailInput, email)
+    const emailStatus = sut.getByTestId('email-status')
+    expect(emailStatus.title).toBe(validationSpy.errorMessage)
+    expect(emailStatus.textContent).toBe('🔴')
   })
 })
