@@ -50,8 +50,8 @@
       },
     },
     setup(props) {
-      const isLoading = ref(false)
       const mainError = ref('')
+      const isLoading = ref(false)
       const emailError = ref('Campo obrigatório')
       const passwordError = ref('Campo obrigatório')
       const email = ref('')
