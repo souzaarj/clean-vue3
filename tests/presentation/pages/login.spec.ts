@@ -113,7 +113,7 @@ describe('Login', () => {
     expect(submitButton.disabled).toBeFalsy()
   })
 
-  test('should enable submit button if form is valid', async () => {
+  test('should spinner on submit', async () => {
     const { sut } = makeSut()
     const password = faker.internet.password()
     const passwordInput = sut.getByPlaceholderText('Digite sua senha')
@@ -121,8 +121,9 @@ describe('Login', () => {
     const email = faker.internet.email()
     const emailInput = sut.getByPlaceholderText('Digite seu e-mail')
     await fireEvent.update(emailInput, email)
-    const submitButton = sut.getByText('Entrar') as HTMLButtonElement
-
-    expect(submitButton.disabled).toBeFalsy()
+    const submitButton = sut.getByText('Entrar')
+    await fireEvent.click(submitButton)
+    const spinner = sut.getByTestId('spinner')
+    expect(spinner).toBeTruthy()
   })
 })
