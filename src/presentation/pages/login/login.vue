@@ -68,8 +68,13 @@
           (emailError.value = props.validation.validate('email', newValue))
       )
 
-      watch(password, (newValue) =>
-        props.validation.validate('password', newValue)
+      watch(
+        password,
+        (newValue) =>
+          (passwordError.value = props.validation.validate(
+            'password',
+            newValue
+          ))
       )
 
       return {
