@@ -63,4 +63,14 @@ describe('Login', () => {
     expect(emailStatus.title).toBe(validationSpy.errorMessage)
     expect(emailStatus.textContent).toBe('🔴')
   })
+
+  test('should show email if validation fails', async () => {
+    const { sut, validationSpy } = makeSut()
+    const password = faker.internet.password()
+    const passwordInput = sut.getByPlaceholderText('Digite sua senha')
+    await fireEvent.update(passwordInput, password)
+    const passwordStatus = sut.getByTestId('password-status')
+    expect(passwordStatus.title).toBe(validationSpy.errorMessage)
+    expect(passwordStatus.textContent).toBe('🔴')
+  })
 })
