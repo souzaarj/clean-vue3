@@ -1,19 +1,8 @@
-import { mockAccountModel } from './../../domain/mocks/mock-account'
-import { Authentication, AuthenticationParams } from '@/domain/usecases'
 import { Login } from '@/presentation/pages'
 import { render, RenderResult, fireEvent } from '@testing-library/vue'
 import { ValidationSpy } from '@/tests/presentation/mocks/'
+import { AuthenticationSpy } from '@/tests/domain/mocks'
 import faker from 'faker'
-import { AccountModel } from '@/domain/models'
-
-class AuthenticationSpy implements Authentication {
-  account = mockAccountModel()
-  params!: AuthenticationParams
-  async auth(params: AuthenticationParams): Promise<AccountModel | undefined> {
-    this.params = params
-    return this.account
-  }
-}
 
 type SutTypes = {
   sut: RenderResult
