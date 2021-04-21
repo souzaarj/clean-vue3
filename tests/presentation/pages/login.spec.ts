@@ -126,9 +126,8 @@ describe('Login', () => {
 
   test('should enable submit button if form is valid', async () => {
     const { sut } = makeSut()
-    populateEmailField(sut)
-    const password = faker.internet.password()
-    await populatePasswordField(sut, password)
+    await populateEmailField(sut)
+    await populatePasswordField(sut)
     const submitButton = sut.getByText('Entrar') as HTMLButtonElement
 
     expect(submitButton.disabled).toBeFalsy()
@@ -154,5 +153,13 @@ describe('Login', () => {
     await simulateValidSubmit(sut)
     await simulateValidSubmit(sut)
     expect(authenticationSpy.callsCount).toBe(1)
+  })
+
+  test('should not call Authentication if form is invalid', async () => {
+    const validationError = faker.random.words()
+    const { sut, authenticationSpy } = makeSut({ validationError })
+    await populateEmailField(sut)
+    fireEvent.submit(sut.getByTestId('form'))
+    expect(authenticationSpy.callsCount).toBe(0)
   })
 })
