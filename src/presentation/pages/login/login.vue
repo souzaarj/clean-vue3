@@ -83,6 +83,8 @@
       )
 
       const onSubmit = (): void => {
+        if (isLoading.value) return
+
         isLoading.value = true
         props.authentication.auth({
           email: email.value,
