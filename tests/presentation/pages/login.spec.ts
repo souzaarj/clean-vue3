@@ -1,7 +1,9 @@
+import { InvalidCredentialError } from '@/domain/errors/invalid-credential-error'
 import { Login } from '@/presentation/pages'
-import { render, RenderResult, fireEvent } from '@testing-library/vue'
+import { render, RenderResult, fireEvent, waitFor } from '@testing-library/vue'
 import { ValidationSpy } from '@/tests/presentation/mocks/'
 import { AuthenticationSpy } from '@/tests/domain/mocks'
+import { mockAccountModel } from '@/tests/domain/mocks/mock-account'
 import faker from 'faker'
 
 type SutTypes = {
@@ -161,5 +163,17 @@ describe('Login', () => {
     await populateEmailField(sut)
     fireEvent.submit(sut.getByTestId('form'))
     expect(authenticationSpy.callsCount).toBe(0)
+  })
+
+  test('should present error if Authentication fails', async () => {
+    const { sut, authenticationSpy } = makeSut()
+    const error = new InvalidCredentialError()
+    jest.spyOn(authenticationSpy, 'auth').mockRejectedValueOnce(error)
+    await simulateValidSubmit(sut)
+    const statusWrap = sut.getByTestId('status-wrap')
+    await waitFor(() => statusWrap)
+    const mainError = sut.getByTestId('main-error')
+    expect(mainError.textContent).toBe(error.message)
+    expect(statusWrap.childElementCount).toBe(1)
   })
 })
