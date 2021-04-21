@@ -8,7 +8,7 @@
     "lint:style": "stylelint src/**/*.{css,scss,vue}",
     "start:dev": "webpack serve --config webpack.config.js --mode development --open",
     "test": "jest --passWithNoTests --runInBand --no-cache",
-    "test:watch": "npm test -- --watchAll",
+    "test:watch": "npm test -- --watch",
     "test:staged": "npm test -- -o",
     "test:ci": "npm test -- --coverage",
     "prepare": "husky install"
