@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <Header title="4Dev - Enquetes para Programadores" />
-    <form class="login__form" @submit.prevent="onSubmit">
+    <form data-testid="form" class="login__form" @submit.prevent="onSubmit">
       <h2 class="login__subTitle">Login</h2>
       <Input
         v-model="email"
@@ -83,7 +83,7 @@
       )
 
       const onSubmit = (): void => {
-        if (isLoading.value) return
+        if (isLoading.value || emailError.value || passwordError.value) return
 
         isLoading.value = true
         props.authentication.auth({
