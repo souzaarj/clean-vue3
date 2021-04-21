@@ -19,7 +19,7 @@
         Entrar
       </button>
       <span class="login__link">Criar conta</span>
-      <FormStatus :loading="isLoading" :error="mainError" />
+      <FormStatus :loading="isLoading" :main-error="mainError" />
     </form>
     <Footer />
   </div>
@@ -82,14 +82,18 @@
           ))
       )
 
-      const onSubmit = (): void => {
-        if (isLoading.value || emailError.value || passwordError.value) return
-
-        isLoading.value = true
-        props.authentication.auth({
-          email: email.value,
-          password: password.value,
-        })
+      const onSubmit = async (): Promise<void> => {
+        try {
+          if (isLoading.value || emailError.value || passwordError.value) return
+          isLoading.value = true
+          await props.authentication.auth({
+            email: email.value,
+            password: password.value,
+          })
+        } catch (error) {
+          isLoading.value = false
+          mainError.value = error.message
+        }
       }
 
       return {

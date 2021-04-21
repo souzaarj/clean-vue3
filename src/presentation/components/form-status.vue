@@ -1,7 +1,12 @@
 <template>
   <div data-testid="status-wrap" class="status-wrap">
     <Spinner v-if="loading" on-submit class="status-wrap__spinner" />
-    <span v-if="errorMessage" class="status-wrap__error">Error</span>
+    <span
+      v-if="mainError"
+      data-testid="main-error"
+      class="status-wrap__error"
+      >{{ mainError }}</span
+    >
   </div>
 </template>
 
@@ -19,7 +24,7 @@
         type: Boolean,
         default: false,
       },
-      errorMessage: {
+      mainError: {
         type: String,
         default: '',
       },
