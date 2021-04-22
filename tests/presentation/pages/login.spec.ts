@@ -3,7 +3,7 @@ import { Login } from '@/presentation/pages'
 import { render, RenderResult, fireEvent, waitFor } from '@testing-library/vue'
 import { ValidationSpy } from '@/tests/presentation/mocks/'
 import { AuthenticationSpy } from '@/tests/domain/mocks'
-import { mockAccountModel } from '@/tests/domain/mocks/mock-account'
+import 'jest-localstorage-mock'
 import faker from 'faker'
 
 type SutTypes = {
@@ -64,6 +64,11 @@ const simulateStatusField = (
 }
 
 describe('Login', () => {
+  beforeEach(() => {
+    localStorage.clear()
+    jest.clearAllMocks()
+  })
+
   test('should start with initial state', () => {
     const { sut } = makeSut()
 
@@ -175,5 +180,15 @@ describe('Login', () => {
     const mainError = sut.getByTestId('main-error')
     expect(mainError.textContent).toBe(error.message)
     expect(statusWrap.childElementCount).toBe(1)
+  })
+
+  test('should add accessToken to localStorage on success', async () => {
+    const { sut, authenticationSpy } = makeSut()
+    await simulateValidSubmit(sut)
+    await waitFor(() => sut.getByTestId('form'))
+    expect(localStorage.setItem).toBeCalledWith(
+      'accessToken',
+      authenticationSpy.account.accessToken
+    )
   })
 })
