@@ -86,10 +86,13 @@
         try {
           if (isLoading.value || emailError.value || passwordError.value) return
           isLoading.value = true
-          await props.authentication.auth({
+
+          const account = await props.authentication.auth({
             email: email.value,
             password: password.value,
           })
+
+          localStorage.setItem('accessToken', account.accessToken)
         } catch (error) {
           isLoading.value = false
           mainError.value = error.message

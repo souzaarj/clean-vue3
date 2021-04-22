@@ -12,7 +12,7 @@ export class RemoteAuthentication implements Authentication {
     >
   ) {}
 
-  async auth(params: AuthenticationParams): Promise<AccountModel | undefined> {
+  async auth(params: AuthenticationParams): Promise<AccountModel> {
     const httpResponse = await this.httpClientPost.post({
       url: this.url,
       body: params,
@@ -20,7 +20,7 @@ export class RemoteAuthentication implements Authentication {
 
     switch (httpResponse.statusCode) {
       case HttpStatusCode.ok:
-        return httpResponse.body
+        return httpResponse.body || { accessToken: '' }
       case HttpStatusCode.unauthorized:
         throw new InvalidCredentialError()
       default:
