@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <Header title="4Dev - Enquetes para Programadores" />
-    <form data-testid="form" class="login__form" @submit.prevent="onSubmit">
+    <form data-test="form" class="login__form" @submit.prevent="onSubmit">
       <h2 class="login__subTitle">Login</h2>
       <Input
         v-model="email"
@@ -18,7 +18,10 @@
       <button class="btn login__button" :disabled="buttonIsDisabled">
         Entrar
       </button>
-      <span class="login__link">Criar conta</span>
+      <router-link data-test="register" to="/signup" class="login__link"
+        >Criar conta</router-link
+      >
+
       <FormStatus :loading="isLoading" :main-error="mainError" />
     </form>
     <Footer />
