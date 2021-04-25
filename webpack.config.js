@@ -2,10 +2,11 @@ const path = require('path')
 
 const { VueLoaderPlugin } = require('vue-loader')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const { DefinePlugin } = require('webpack')
+const { DefinePlugin, SourceMapDevToolPlugin } = require('webpack')
 
 module.exports = {
   mode: 'development',
+  devtool: false,
   entry: './src/main/main.ts',
   output: {
     path: path.join(__dirname, 'public/js'),
@@ -79,5 +80,12 @@ module.exports = {
       __VUE_PROD_DEVTOOLS__: false,
     }),
     new VueLoaderPlugin(),
+    new SourceMapDevToolPlugin({
+      filename: '[file].map[query]',
+      append: null,
+      module: true,
+      columns: true,
+      noSources: false,
+    }),
   ],
 }

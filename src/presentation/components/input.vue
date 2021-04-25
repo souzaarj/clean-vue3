@@ -9,7 +9,7 @@
       @input="$emit('update:modelValue', $event.target.value)"
     />
     <span
-      :data-testid="type + '-status'"
+      :data-test="type + '-status'"
       :title="getTitle"
       class="input-wrap__status"
       >{{ getStatus }}</span

@@ -1,20 +1,11 @@
 <template>
-  <router-view />
-  <!-- <Login /> -->
   <div data-testid="location-display">{{ $route.fullPath }}</div>
 </template>
 
-<script lang="ts">
+<script>
   import { defineComponent } from 'vue'
 
   export default defineComponent({
-    name: 'App',
-    components: {},
+    name: 'LocationDisplay',
   })
 </script>
-
-<style lang="scss" scoped>
-  h1 {
-    color: red;
-  }
-</style>

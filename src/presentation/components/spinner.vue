@@ -1,5 +1,5 @@
 <template>
-  <div data-testid="spinner" class="spinner">
+  <div class="spinner" data-test="spinner">
     <div></div>
     <div></div>
     <div></div>

@@ -1,12 +1,9 @@
 <template>
-  <div data-testid="status-wrap" class="status-wrap">
-    <Spinner v-if="loading" on-submit class="status-wrap__spinner" />
-    <span
-      v-if="mainError"
-      data-testid="main-error"
-      class="status-wrap__error"
-      >{{ mainError }}</span
-    >
+  <div data-test="status-wrap" class="status-wrap">
+    <Spinner v-if="loading" class="status-wrap__spinner" />
+    <span v-if="mainError" data-test="main-error" class="status-wrap__error">{{
+      mainError
+    }}</span>
   </div>
 </template>
 

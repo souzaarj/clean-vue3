@@ -6,4 +6,5 @@ public
 *.scss
 webpack.config.js
 jest.config.ts
+jest.setup.js
 babel.config.js

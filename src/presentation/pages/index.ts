@@ -1,3 +1,3 @@
-import Login from './login/login.vue'
+import Login from './login.vue'
 
 export { Login }
