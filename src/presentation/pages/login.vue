@@ -38,6 +38,7 @@
     FormStatus,
     Footer,
   } from '@/presentation/components'
+  import { useRouter } from 'vue-router'
 
   export default defineComponent({
     name: 'Login',
@@ -57,7 +58,7 @@
         required: true,
       },
     },
-    setup(props) {
+    setup(props, context) {
       const mainError = ref('')
       const isLoading = ref(false)
       const emailError = ref('Campo obrigatório')
@@ -67,6 +68,7 @@
       const buttonIsDisabled = computed(
         () => !!emailError.value || !!passwordError.value
       )
+      const route = useRouter()
 
       provide('stateLogin', { isLoading, mainError, emailError, passwordError })
 
@@ -96,6 +98,7 @@
           })
 
           localStorage.setItem('accessToken', account.accessToken)
+          route.push('/')
         } catch (error) {
           isLoading.value = false
           mainError.value = error.message
