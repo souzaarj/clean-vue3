@@ -180,7 +180,6 @@ describe('Login', () => {
     jest.spyOn(authenticationSpy, 'auth').mockRejectedValueOnce(error)
     await simulateValidSubmit(sut)
     const statusWrap = sut.find('[data-test="status-wrap"]')
-    // await waitFor(() => statusWrap)
     const mainError = sut.find('[data-test="main-error"]')
     expect(mainError.text()).toBe(error.message)
     expect(statusWrap.element.childElementCount).toBe(1)
@@ -194,20 +193,20 @@ describe('Login', () => {
       'accessToken',
       authenticationSpy.account.accessToken
     )
+    await flushPromises()
+    expect(sut.vm.$route).toMatchObject({
+      path: '/',
+    })
   })
 
   test('should contains route-link to signup', () => {
     const { sut } = makeSut()
-
     const signup = sut.find('[data-test="register"]')
-    console.log(signup.attributes().href)
-
     expect(signup.attributes().href).toBe('/signup')
   })
 
   test('should change the current location when pushing', async () => {
     const { sut } = makeSut()
-
     sut.vm.$router.push('/signup')
     await flushPromises()
     expect(sut.vm.$route).toMatchObject({
