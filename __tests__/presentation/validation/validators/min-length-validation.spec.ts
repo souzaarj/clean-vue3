@@ -13,4 +13,11 @@ describe('MinLengthValidation', () => {
     const error = sut.validate(faker.lorem.word(minLength - 1))
     expect(error).toEqual(new InvalidFieldError())
   })
+
+  test('should returns falsy if value is valid', () => {
+    const minLength = 5
+    const sut = makeSut(minLength)
+    const result = sut.validate(faker.lorem.word(minLength))
+    expect(result).toBeFalsy()
+  })
 })
