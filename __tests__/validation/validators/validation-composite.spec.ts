@@ -22,22 +22,19 @@ const makeSut = (field: string): SutTypes => {
 
 describe('ValidationComposite', () => {
   test('should return error if any validation fails', () => {
-    const field = faker.database.column()
-    const { sut, fieldValidationSpy } = makeSut(field)
+    const fieldName = faker.database.column()
+    const { sut, fieldValidationSpy } = makeSut(fieldName)
     const firstErrorMessage = faker.random.word()
     fieldValidationSpy[0].error = new Error(firstErrorMessage)
     fieldValidationSpy[1].error = new Error(faker.random.word())
-    const error = sut.validate(field, faker.random.word())
+    const error = sut.validate(fieldName, faker.random.word())
     expect(error).toBe(firstErrorMessage)
   })
 
-  test('should return error if any validation fails', () => {
-    const field = faker.database.column()
-    const { sut, fieldValidationSpy } = makeSut(field)
-    const firstErrorMessage = faker.random.word()
-    fieldValidationSpy[0].error = new Error(firstErrorMessage)
-    fieldValidationSpy[1].error = new Error(faker.random.word())
-    const error = sut.validate(field, faker.random.word())
-    expect(error).toBe(firstErrorMessage)
+  test('should return falsy if validation success', () => {
+    const fieldName = faker.database.column()
+    const { sut } = makeSut(fieldName)
+    const error = sut.validate(fieldName, faker.random.word())
+    expect(error).toBeFalsy()
   })
 })
