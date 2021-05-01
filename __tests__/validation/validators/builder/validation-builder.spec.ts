@@ -4,22 +4,40 @@ import {
   EmailValidation,
   MinLengthValidation,
 } from '@/validation/validators'
+import faker from 'faker'
 
 describe('ValidationBuilder', () => {
   test('should return RequireFieldValidation ', () => {
-    const validations = ValidationBuilder.field('any_field').required().build()
-    expect(validations).toEqual([new RequiredFieldValidation('any_field')])
+    const field = faker.random.word()
+    const validations = ValidationBuilder.field(field).required().build()
+    expect(validations).toEqual([new RequiredFieldValidation(field)])
   })
 
   test('should return EmailValidation ', () => {
-    const validations = ValidationBuilder.field('any_field').email().build()
-    expect(validations).toEqual([new EmailValidation('any_field')])
+    const field = faker.random.word()
+    const validations = ValidationBuilder.field(field).email().build()
+    expect(validations).toEqual([new EmailValidation(field)])
   })
 
   test('should return MinLengthValidation ', () => {
-    const validations = ValidationBuilder.field('any_field')
-      .minLength(5)
+    const field = faker.random.word()
+    const length = faker.datatype.number()
+    const validations = ValidationBuilder.field(field).minLength(length).build()
+    expect(validations).toEqual([new MinLengthValidation(field, length)])
+  })
+
+  test('should return a list of validations', () => {
+    const field = faker.random.word()
+    const length = faker.datatype.number()
+    const validations = ValidationBuilder.field(field)
+      .required()
+      .minLength(length)
+      .email()
       .build()
-    expect(validations).toEqual([new MinLengthValidation('any_field', 5)])
+    expect(validations).toEqual([
+      new RequiredFieldValidation(field),
+      new MinLengthValidation(field, length),
+      new EmailValidation(field),
+    ])
   })
 })
