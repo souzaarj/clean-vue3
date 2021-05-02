@@ -1,17 +1,12 @@
 <template>
-  <Login
-    :validation="validationComposite"
-    :authentication="remoteAuthentication"
-  />
+  <Login :validation="loginValidation" :authentication="remoteAuthentication" />
 </template>
 
 <script>
   import { defineComponent } from 'vue'
   import { Login } from '@/presentation/pages'
-  import { RemoteAuthentication } from '@/data/usecases'
-  import { AxiosHttpClient } from '@/infra/axios-http-client'
-  import { ValidationComposite } from '@/validation/validators'
-  import { ValidationBuilder } from '@/validation/validators/builder'
+  import { makeLoginValidation } from '@/main/factories/pages/login-validation-factory'
+  import { makeRemoteAuthentication } from '@/main/factories/usecases/remoteAuthentication-factory'
 
   export default defineComponent({
     name: 'MakeLogin',
@@ -19,21 +14,11 @@
       Login: Login,
     },
     setup() {
-      const url = 'http://localhost:5050/api/login'
-      const axiosHttpClient = new AxiosHttpClient()
-      const remoteAuthentication = new RemoteAuthentication(
-        url,
-        axiosHttpClient
-      )
-
-      const validationComposite = ValidationComposite.build([
-        ...ValidationBuilder.field('email').required().email().build(),
-        ...ValidationBuilder.field('password').required().minLength(2).build(),
-      ])
-
+      const remoteAuthentication = makeRemoteAuthentication()
+      const loginValidation = makeLoginValidation()
       return {
         remoteAuthentication,
-        validationComposite,
+        loginValidation,
       }
     },
   })
