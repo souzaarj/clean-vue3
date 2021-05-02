@@ -1,4 +1,4 @@
-import { mockHttpResponse } from '@/infra/mocks/mock-axios'
+import { mockHttpResponse } from '@/tests/infra/mocks/mock-axios'
 import { mockAxios } from './mocks/mock-axios'
 import { HttpPostParams } from '@/data/protocols/http-post-client'
 import { AxiosHttpClient } from '@/infra/axios-http-client'

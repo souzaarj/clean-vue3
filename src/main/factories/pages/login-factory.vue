@@ -14,7 +14,7 @@
       Login: Login,
     },
     setup() {
-      const remoteAuthentication = makeRemoteAuthentication()
+      const remoteAuthentication = makeRemoteAuthentication('/login')
       const loginValidation = makeLoginValidation()
       return {
         remoteAuthentication,
