@@ -58,7 +58,7 @@
         required: true,
       },
     },
-    setup(props, context) {
+    setup(props) {
       const mainError = ref('')
       const isLoading = ref(false)
       const emailError = ref('Campo obrigatório')
@@ -75,16 +75,15 @@
       watch(
         email,
         (newValue) =>
-          (emailError.value = props.validation.validate('email', newValue))
+          (emailError.value =
+            props.validation.validate('email', newValue) || '')
       )
 
       watch(
         password,
         (newValue) =>
-          (passwordError.value = props.validation.validate(
-            'password',
-            newValue
-          ))
+          (passwordError.value =
+            props.validation.validate('password', newValue) || '')
       )
 
       const onSubmit = async (): Promise<void> => {

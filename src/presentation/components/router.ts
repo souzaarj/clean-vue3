@@ -1,11 +1,11 @@
 import { createWebHistory, createRouter } from 'vue-router'
-import { Login } from '@/presentation/pages'
+import MakeLogin from '@/main/factories/pages/login-factory.vue'
 import { Logo } from '@/presentation/components'
 export const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: Login,
+    component: MakeLogin,
   },
   {
     path: '/signup',
