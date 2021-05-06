@@ -49,6 +49,7 @@
         required: false,
       },
     },
+    emits: ['update:modelValue'],
     setup(props) {
       const stateLogin = inject('stateLogin')
       const error = stateLogin[`${props.name}Error`]
