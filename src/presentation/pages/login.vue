@@ -39,6 +39,7 @@
     Footer,
   } from '@/presentation/components'
   import { useRouter } from 'vue-router'
+  import { SaveAccessToken } from '@/domain/usecases/save-access-token'
 
   export default defineComponent({
     name: 'Login',
@@ -55,6 +56,10 @@
       },
       authentication: {
         type: Object as PropType<Authentication>,
+        required: true,
+      },
+      saveAccessToken: {
+        type: Object as PropType<SaveAccessToken>,
         required: true,
       },
     },
@@ -95,8 +100,7 @@
             email: email.value,
             password: password.value,
           })
-
-          localStorage.setItem('accessToken', account.accessToken)
+          await props.saveAccessToken.save(account.accessToken)
           route.push('/')
         } catch (error) {
           isLoading.value = false
