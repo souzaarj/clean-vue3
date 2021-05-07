@@ -5,10 +5,9 @@ import { Login } from '@/presentation/pages'
 import { mount, VueWrapper, flushPromises, config } from '@vue/test-utils'
 import { ValidationSpy } from '@/tests/presentation/mocks'
 import { AuthenticationSpy } from '@/tests/domain/mocks'
-import 'jest-localstorage-mock'
 import faker from 'faker'
 
-class SaveAccessTokenSpy implements SaveAccessToken {
+class SaveAccessTokenMock implements SaveAccessToken {
   accessToken: string
   async save(accessToken: string): Promise<void> {
     this.accessToken = accessToken
@@ -19,7 +18,7 @@ type SutTypes = {
   sut: VueWrapper<any>
   validationSpy: ValidationSpy
   authenticationSpy: AuthenticationSpy
-  saveAccessTokenSpy: SaveAccessTokenSpy
+  saveAccessTokenMock: SaveAccessTokenMock
 }
 
 type SutParams = {
@@ -28,14 +27,14 @@ type SutParams = {
 
 const makeSut = (paramError?: SutParams): SutTypes => {
   const validationSpy = new ValidationSpy()
-  const saveAccessTokenSpy = new SaveAccessTokenSpy()
+  const saveAccessTokenMock = new SaveAccessTokenMock()
   validationSpy.errorMessage = paramError?.validationError || ''
   const authenticationSpy = new AuthenticationSpy()
 
   const props = {
     validation: validationSpy,
     authentication: authenticationSpy,
-    saveAccessToken: saveAccessTokenSpy,
+    saveAccessToken: saveAccessTokenMock,
   }
 
   const sut = mount(Login, {
@@ -45,7 +44,7 @@ const makeSut = (paramError?: SutParams): SutTypes => {
     },
   })
 
-  return { sut, validationSpy, authenticationSpy, saveAccessTokenSpy }
+  return { sut, validationSpy, authenticationSpy, saveAccessTokenMock }
 }
 
 const simulateValidSubmit = async (
@@ -84,11 +83,6 @@ const simulateStatusField = (
 }
 
 describe('Login', () => {
-  beforeEach(async () => {
-    localStorage.clear()
-    jest.clearAllMocks()
-  })
-
   test('should start with initial state', async () => {
     const { sut } = makeSut()
     await router.isReady()
@@ -202,10 +196,10 @@ describe('Login', () => {
   })
 
   test('should call SaveAccessToken with correct token', async () => {
-    const { sut, authenticationSpy, saveAccessTokenSpy } = makeSut()
+    const { sut, authenticationSpy, saveAccessTokenMock } = makeSut()
     const accessToken = authenticationSpy.account.accessToken
     await simulateValidSubmit(sut)
-    expect(saveAccessTokenSpy.accessToken).toBe(accessToken)
+    expect(saveAccessTokenMock.accessToken).toBe(accessToken)
   })
 
   test('should contains route-link to signup', () => {
