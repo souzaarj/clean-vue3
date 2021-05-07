@@ -1,3 +1,4 @@
+import { SaveAccessToken } from '@/domain/usecases/save-access-token'
 import router from '@/presentation/components/router'
 import { InvalidCredentialError } from '@/domain/errors/invalid-credential-error'
 import { Login } from '@/presentation/pages'
@@ -7,10 +8,18 @@ import { AuthenticationSpy } from '@/tests/domain/mocks'
 import 'jest-localstorage-mock'
 import faker from 'faker'
 
+class SaveAccessTokenSpy implements SaveAccessToken {
+  accessToken: string
+  async save(accessToken: string): Promise<void> {
+    this.accessToken = accessToken
+  }
+}
+
 type SutTypes = {
   sut: VueWrapper<any>
   validationSpy: ValidationSpy
   authenticationSpy: AuthenticationSpy
+  saveAccessTokenSpy: SaveAccessTokenSpy
 }
 
 type SutParams = {
@@ -19,9 +28,16 @@ type SutParams = {
 
 const makeSut = (paramError?: SutParams): SutTypes => {
   const validationSpy = new ValidationSpy()
+  const saveAccessTokenSpy = new SaveAccessTokenSpy()
   validationSpy.errorMessage = paramError?.validationError || ''
   const authenticationSpy = new AuthenticationSpy()
-  const props = { validation: validationSpy, authentication: authenticationSpy }
+
+  const props = {
+    validation: validationSpy,
+    authentication: authenticationSpy,
+    saveAccessToken: saveAccessTokenSpy,
+  }
+
   const sut = mount(Login, {
     props,
     global: {
@@ -29,7 +45,7 @@ const makeSut = (paramError?: SutParams): SutTypes => {
     },
   })
 
-  return { sut, validationSpy, authenticationSpy }
+  return { sut, validationSpy, authenticationSpy, saveAccessTokenSpy }
 }
 
 const simulateValidSubmit = async (
@@ -185,18 +201,11 @@ describe('Login', () => {
     expect(statusWrap.element.childElementCount).toBe(1)
   })
 
-  test('should add accessToken to localStorage on success', async () => {
-    const { sut, authenticationSpy } = makeSut()
+  test('should call SaveAccessToken with correct token', async () => {
+    const { sut, authenticationSpy, saveAccessTokenSpy } = makeSut()
+    const accessToken = authenticationSpy.account.accessToken
     await simulateValidSubmit(sut)
-    await sut.find('[data-test="form"]')
-    expect(localStorage.setItem).toBeCalledWith(
-      'accessToken',
-      authenticationSpy.account.accessToken
-    )
-    await flushPromises()
-    expect(sut.vm.$route).toMatchObject({
-      path: '/',
-    })
+    expect(saveAccessTokenSpy.accessToken).toBe(accessToken)
   })
 
   test('should contains route-link to signup', () => {
