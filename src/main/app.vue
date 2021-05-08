@@ -1,7 +1,6 @@
 <template>
   <router-view />
   <!-- <Login /> -->
-  <div data-testid="location-display">{{ $route.fullPath }}</div>
 </template>
 
 <script lang="ts">
