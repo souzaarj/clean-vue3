@@ -1,5 +1,5 @@
 import { SaveAccessToken } from '@/domain/usecases/save-access-token'
-import router from '@/presentation/components/router'
+import router from '@/presentation/router/router'
 import { InvalidCredentialError } from '@/domain/errors/invalid-credential-error'
 import { Login } from '@/presentation/pages'
 import { mount, VueWrapper, flushPromises, config } from '@vue/test-utils'

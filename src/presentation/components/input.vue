@@ -18,7 +18,7 @@
 </template>
 
 <script>
-  import { defineComponent, computed, inject } from 'vue'
+  import { defineComponent, computed } from 'vue'
 
   export default defineComponent({
     name: 'Input',
@@ -38,7 +38,7 @@
         default: '',
         required: false,
       },
-      msgError: {
+      error: {
         type: String,
         default: '',
         required: false,
@@ -51,10 +51,8 @@
     },
     emits: ['update:modelValue'],
     setup(props) {
-      const stateLogin = inject('stateLogin')
-      const error = stateLogin[`${props.name}Error`]
-      const getStatus = computed(() => (error.value ? '🔴' : '🟢'))
-      const getTitle = computed(() => error.value || 'Tudo certo!')
+      const getStatus = computed(() => (props.error ? '🔴' : '🟢'))
+      const getTitle = computed(() => props.error || 'Tudo certo!')
 
       return {
         getStatus,

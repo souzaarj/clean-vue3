@@ -8,12 +8,14 @@
         name="email"
         type="email"
         place-holder="Digite seu e-mail"
+        :error="emailError"
       />
       <Input
         v-model="password"
         name="password"
         type="password"
         place-holder="Digite sua senha"
+        :error="passwordError"
       />
       <button class="btn login__button" :disabled="buttonIsDisabled">
         Entrar
@@ -74,8 +76,6 @@
         () => !!emailError.value || !!passwordError.value
       )
       const route = useRouter()
-
-      provide('stateLogin', { isLoading, mainError, emailError, passwordError })
 
       watch(
         email,
