@@ -5,7 +5,7 @@
       <h2 class="signup__subTitle">Criar Conta</h2>
       <Input
         v-model="name"
-        name="email"
+        name="name"
         type="text"
         place-holder="Digite seu nome"
         :error="nameError"
