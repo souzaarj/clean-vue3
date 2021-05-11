@@ -91,7 +91,13 @@
           (nameError.value = props.validation.validate('name', newValue) || '')
       )
 
-      watch(email, (newValue) => props.validation.validate('email', newValue))
+      watch(
+        email,
+        (newValue) =>
+          (emailError.value =
+            props.validation.validate('email', newValue) || '')
+      )
+
       watch(password, (newValue) =>
         props.validation.validate('password', newValue)
       )
