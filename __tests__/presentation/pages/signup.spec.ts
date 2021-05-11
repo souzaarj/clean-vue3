@@ -55,4 +55,13 @@ describe('Signup', () => {
     expect(validationSpy.fieldName).toBe('name')
     expect(validationSpy.fieldValue).toBe(name)
   })
+
+  test('should call Validation with correct email', async () => {
+    const { sut, validationSpy } = makeSut()
+    const email = faker.internet.email()
+
+    await populateField(sut, 'email', email)
+    expect(validationSpy.fieldName).toBe('email')
+    expect(validationSpy.fieldValue).toBe(email)
+  })
 })
