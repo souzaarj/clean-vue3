@@ -90,6 +90,9 @@
       watch(password, (newValue) =>
         props.validation.validate('password', newValue)
       )
+      watch(passwordConfirmation, (newValue) =>
+        props.validation.validate('passwordConfirmation', newValue)
+      )
 
       return {
         email,
