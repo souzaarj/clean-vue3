@@ -45,13 +45,14 @@
 </template>
 
 <script lang="ts">
-  import { ref, defineComponent, computed } from 'vue'
+  import { ref, defineComponent, computed, PropType, watch } from 'vue'
   import {
     LoginHeader as Header,
     Input,
     FormStatus,
     Footer,
   } from '@/presentation/components'
+  import { Validation } from '../protocols/validation'
 
   export default defineComponent({
     name: 'Signup',
@@ -61,8 +62,14 @@
       FormStatus,
       Footer,
     },
+    props: {
+      validation: {
+        type: Object as PropType<Validation>,
+        required: true,
+      },
+    },
 
-    setup() {
+    setup(props) {
       const mainError = ref('')
       const isLoading = ref(false)
       const name = ref('')
@@ -73,9 +80,12 @@
       const passwordError = ref('Campo obrigatório')
       const emailError = ref('Campo obrigatório')
       const passwordConfimationError = ref('Campo obrigatório')
+
       const buttonIsDisabled = computed(
         () => !!emailError.value || !!passwordError.value
       )
+
+      watch(name, (newValue) => props.validation.validate('name', newValue))
 
       return {
         email,
