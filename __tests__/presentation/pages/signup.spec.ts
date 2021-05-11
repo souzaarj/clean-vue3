@@ -1,3 +1,5 @@
+import { ValidationSpy } from '@/tests/presentation/mocks'
+import { populateField } from './../helper/test-helper'
 import {
   testFieldStatus,
   testFieldChildCount,
@@ -5,14 +7,24 @@ import {
 import { Signup } from '@/presentation/pages'
 import { mount, VueWrapper } from '@vue/test-utils'
 import router from '@/presentation/router/router'
+import faker from 'faker'
 
 type SutTypes = {
   sut: VueWrapper<any>
+  validationSpy: ValidationSpy
 }
 
 const makeSut = (): SutTypes => {
-  const sut = mount(Signup, { global: { plugins: [router] } })
-  return { sut }
+  const validationSpy = new ValidationSpy()
+  const props = { validation: validationSpy }
+
+  const sut = mount(Signup, {
+    props,
+    global: {
+      plugins: [router],
+    },
+  })
+  return { sut, validationSpy }
 }
 
 describe('Signup', () => {
@@ -34,5 +46,13 @@ describe('Signup', () => {
       'Campo obrigatório',
       '🔴'
     )
+  })
+  test('should call Validation with correct name', async () => {
+    const { sut, validationSpy } = makeSut()
+    const name = faker.internet.userName()
+
+    await populateField(sut, 'name', name)
+    expect(validationSpy.fieldName).toBe('name')
+    expect(validationSpy.fieldValue).toBe(name)
   })
 })
