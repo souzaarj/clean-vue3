@@ -29,7 +29,7 @@
         name="passwordConfirmation"
         type="password"
         place-holder="Confirme sua senha"
-        :error="passwordConfimationError"
+        :error="passwordConfirmationError"
       />
       <button class="btn signup__button" :disabled="buttonIsDisabled">
         Enviar
@@ -79,7 +79,7 @@
       const nameError = ref('Campo obrigatório')
       const passwordError = ref('Campo obrigatório')
       const emailError = ref('Campo obrigatório')
-      const passwordConfimationError = ref('Campo obrigatório')
+      const passwordConfirmationError = ref('Campo obrigatório')
 
       const buttonIsDisabled = computed(
         () => !!emailError.value || !!passwordError.value
@@ -104,8 +104,12 @@
           (passwordError.value =
             props.validation.validate('password', newValue) || '')
       )
-      watch(passwordConfirmation, (newValue) =>
-        props.validation.validate('passwordConfirmation', newValue)
+
+      watch(
+        passwordConfirmation,
+        (newValue) =>
+          (passwordConfirmationError.value =
+            props.validation.validate('passwordConfirmation', newValue) || '')
       )
 
       return {
@@ -116,7 +120,7 @@
         nameError,
         emailError,
         passwordError,
-        passwordConfimationError,
+        passwordConfirmationError,
         mainError,
         isLoading,
         buttonIsDisabled,
