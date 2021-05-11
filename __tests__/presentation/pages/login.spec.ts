@@ -1,9 +1,14 @@
+import {
+  simulateStatusField,
+  testFieldStatus,
+  populateField,
+} from '@/tests/presentation/helper/test-helper'
 import { SaveAccessToken } from '@/domain/usecases/save-access-token'
 import router from '@/presentation/router/router'
 import { InvalidCredentialError } from '@/domain/errors/invalid-credential-error'
 import { Login } from '@/presentation/pages'
 import { mount, VueWrapper, flushPromises, config } from '@vue/test-utils'
-import { ValidationSpy } from '@/tests/presentation/mocks'
+import { testFieldChildCount, ValidationSpy } from '@/tests/presentation/mocks'
 import { AuthenticationSpy } from '@/tests/domain/mocks'
 import faker from 'faker'
 
@@ -52,59 +57,28 @@ const simulateValidSubmit = async (
   email = faker.internet.email(),
   password = faker.internet.password()
 ): Promise<void> => {
-  await populateEmailField(sut, email)
-  await populatePasswordField(sut, password)
+  await populateField(sut, 'email', email)
+  await populateField(sut, 'password', password)
   await sut.find('button').trigger('submit')
-}
-
-const populateEmailField = async (
-  sut: VueWrapper<any>,
-  email = faker.internet.email()
-): Promise<void> => {
-  await sut.find('input[type="email"]').setValue(email)
-}
-
-const populatePasswordField = async (
-  sut: VueWrapper<any>,
-  password = faker.internet.password()
-): Promise<void> => {
-  await sut.find('input[type="password"]').setValue(password)
-}
-
-const simulateStatusField = (
-  sut: VueWrapper<any>,
-  fieldName: string,
-  validationError?: string
-): void => {
-  const fieldStatus = sut.find(`[data-test="${fieldName}-status"]`)
-
-  expect(fieldStatus.attributes('title')).toBe(validationError || 'Tudo certo!')
-  expect(fieldStatus.text()).toBe(validationError ? '🔴' : '🟢')
 }
 
 describe('Login', () => {
   test('should start with initial state', async () => {
     const { sut } = makeSut()
     await router.isReady()
-    const statusWrap = sut.find('[data-test="status-wrap"]')
-    expect(statusWrap.element.childElementCount).toBe(0)
+    testFieldChildCount(sut, 'status-wrap', 0)
 
     const submitButton = await sut.find('button')
     expect(submitButton.element.disabled).toBeTruthy()
 
-    const emailStatus = sut.find('[data-test="email-status"]')
-    expect(emailStatus.attributes('title')).toBe('Campo obrigatório')
-    expect(emailStatus.text()).toBe('🔴')
-
-    const passwordStatus = sut.find('[data-test="password-status"]')
-    expect(passwordStatus.attributes('title')).toBe('Campo obrigatório')
-    expect(passwordStatus.text()).toBe('🔴')
+    testFieldStatus(sut, 'email-status', 'Campo obrigatório', '🔴')
+    testFieldStatus(sut, 'password-status', 'Campo obrigatório', '🔴')
   })
 
   test('should call validation with correct email', async () => {
     const { sut, validationSpy } = makeSut()
     const email = faker.internet.email()
-    await populateEmailField(sut, email)
+    await populateField(sut, 'email', email)
     expect(validationSpy.fieldName).toBe('email')
     expect(validationSpy.fieldValue).toBe(email)
   })
@@ -112,7 +86,7 @@ describe('Login', () => {
   test('should call validation with correct password', async () => {
     const { sut, validationSpy } = makeSut()
     const password = faker.internet.email()
-    await populatePasswordField(sut, password)
+    await populateField(sut, 'password', password)
     expect(validationSpy.fieldName).toBe('password')
     expect(validationSpy.fieldValue).toBe(password)
   })
@@ -120,33 +94,34 @@ describe('Login', () => {
   test('should show email error if validation fails', async () => {
     const validationError = faker.random.words()
     const { sut } = makeSut({ validationError })
-    await populateEmailField(sut)
+    await populateField(sut, 'email', faker.internet.email())
     simulateStatusField(sut, 'email', validationError)
   })
 
   test('should show password error if validation fails', async () => {
     const validationError = faker.random.words()
     const { sut } = makeSut({ validationError })
-    await populatePasswordField(sut)
+    await populateField(sut, 'password', faker.internet.password())
     simulateStatusField(sut, 'password', validationError)
   })
 
   test('should show valid email state if Validation success', async () => {
     const { sut } = makeSut()
-    await populateEmailField(sut)
+    await populateField(sut, 'email', faker.internet.email())
     simulateStatusField(sut, 'email')
   })
 
   test('should show valid password state if Validation success', async () => {
     const { sut } = makeSut()
-    await populatePasswordField(sut)
+    await populateField(sut, 'password', faker.internet.password())
+
     simulateStatusField(sut, 'password')
   })
 
   test('should enable submit button if form is valid', async () => {
     const { sut } = makeSut()
-    await populateEmailField(sut)
-    await populatePasswordField(sut)
+    await populateField(sut, 'email', faker.internet.email())
+    await populateField(sut, 'password', faker.internet.password())
     const submitButton = sut.find('button')
 
     expect(submitButton.element.disabled).toBeFalsy()
@@ -179,7 +154,7 @@ describe('Login', () => {
   test('should not call Authentication if form is invalid', async () => {
     const validationError = faker.random.words()
     const { sut, authenticationSpy } = makeSut({ validationError })
-    await populateEmailField(sut)
+    await populateField(sut, 'email', faker.internet.email())
     await sut.find('button').trigger('submit')
     expect(authenticationSpy.callsCount).toBe(0)
   })
