@@ -155,4 +155,16 @@ describe('Signup', () => {
     const button = sut.find('button')
     expect(button.element.disabled).toBeFalsy()
   })
+
+  test('should show spinner on submit', async () => {
+    const { sut } = makeSut()
+    await populateField(sut, 'name', faker.internet.userName())
+    await populateField(sut, 'email', faker.internet.email())
+    await populateField(sut, 'password', faker.internet.password())
+    await populateField(sut, 'passwordConfirmation', faker.internet.password())
+    const button = sut.find('button')
+    await button.trigger('submit')
+    const spinner = sut.find('[data-test="spinner"]')
+    expect(spinner.isVisible).toBeTruthy()
+  })
 })
