@@ -198,4 +198,12 @@ describe('Signup', () => {
     )
     expect(addAccountSpy.params).toEqual(addAccountParams)
   })
+
+  test('should call AddAccount only once', async () => {
+    const { sut, addAccountSpy } = makeSut()
+
+    await simulateSignupFormSubmit(sut)
+    await simulateSignupFormSubmit(sut)
+    expect(addAccountSpy.callsCount).toBe(1)
+  })
 })
