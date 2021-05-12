@@ -145,4 +145,14 @@ describe('Signup', () => {
     await populateField(sut, 'passwordConfirmation', faker.internet.password())
     simulateStatusField(sut, 'passwordConfirmation')
   })
+
+  test('should enable submit button if form is valid', async () => {
+    const { sut } = makeSut()
+    await populateField(sut, 'name', faker.internet.userName())
+    await populateField(sut, 'email', faker.internet.email())
+    await populateField(sut, 'password', faker.internet.password())
+    await populateField(sut, 'passwordConfirmation', faker.internet.password())
+    const button = sut.find('button')
+    expect(button.element.disabled).toBeFalsy()
+  })
 })
