@@ -82,7 +82,11 @@
       const passwordConfirmationError = ref('Campo obrigatório')
 
       const buttonIsDisabled = computed(
-        () => !!emailError.value || !!passwordError.value
+        () =>
+          !!nameError.value ||
+          !!emailError.value ||
+          !!passwordError.value ||
+          !!passwordConfirmationError.value
       )
 
       watch(
