@@ -1,7 +1,7 @@
 <template>
   <div class="signup">
     <Header title="4Dev - Enquetes para Programadores" />
-    <form data-test="form" class="signup__form">
+    <form data-test="form" class="signup__form" @submit.prevent="onSubmit">
       <h2 class="signup__subTitle">Criar Conta</h2>
       <Input
         v-model="name"
@@ -80,14 +80,14 @@
       const passwordError = ref('Campo obrigatório')
       const emailError = ref('Campo obrigatório')
       const passwordConfirmationError = ref('Campo obrigatório')
-
-      const buttonIsDisabled = computed(
+      const anyFieldError = computed(
         () =>
           !!nameError.value ||
           !!emailError.value ||
           !!passwordError.value ||
           !!passwordConfirmationError.value
       )
+      const buttonIsDisabled = computed(() => anyFieldError.value)
 
       watch(
         name,
@@ -116,6 +116,12 @@
             props.validation.validate('passwordConfirmation', newValue) || '')
       )
 
+      const onSubmit = () => {
+        if (isLoading.value || anyFieldError.value) return
+
+        isLoading.value = true
+      }
+
       return {
         email,
         password,
@@ -128,6 +134,7 @@
         mainError,
         isLoading,
         buttonIsDisabled,
+        onSubmit,
       }
     },
   })
