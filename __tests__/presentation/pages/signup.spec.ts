@@ -1,3 +1,6 @@
+import { AddAccount } from './../../../src/domain/usecases/add-account'
+import { mockAddAccount } from '@/tests/domain/mocks'
+import { AddAccountSpy } from './../../domain/mocks/mock-account'
 import { ValidationSpy } from '@/tests/presentation/mocks'
 import {
   populateField,
@@ -17,6 +20,7 @@ import faker from 'faker'
 type SutTypes = {
   sut: VueWrapper<any>
   validationSpy: ValidationSpy
+  addAccountSpy: AddAccountSpy
 }
 type SutParams = {
   validationError: string
@@ -24,7 +28,9 @@ type SutParams = {
 
 const makeSut = (paramError?: SutParams): SutTypes => {
   const validationSpy = new ValidationSpy()
-  const props = { validation: validationSpy }
+  const addAccountSpy = new AddAccountSpy()
+
+  const props = { validation: validationSpy, addAccount: addAccountSpy }
   validationSpy.errorMessage = paramError?.validationError || ''
   const sut = mount(Signup, {
     props,
@@ -32,7 +38,22 @@ const makeSut = (paramError?: SutParams): SutTypes => {
       plugins: [router],
     },
   })
-  return { sut, validationSpy }
+  return { sut, validationSpy, addAccountSpy }
+}
+
+const simulateSignupFormSubmit = async (
+  sut: VueWrapper<any>,
+  name = faker.internet.userName(),
+  email = faker.internet.email(),
+  password = faker.internet.password(),
+  passwordConfirmation = faker.internet.password()
+): Promise<void> => {
+  await populateField(sut, 'name', name)
+  await populateField(sut, 'email', email)
+  await populateField(sut, 'password', password)
+  await populateField(sut, 'passwordConfirmation', passwordConfirmation)
+  const button = sut.find('button')
+  await button.trigger('submit')
 }
 
 describe('Signup', () => {
@@ -55,6 +76,7 @@ describe('Signup', () => {
       '🔴'
     )
   })
+
   test('should call Validation with correct name', async () => {
     const { sut, validationSpy } = makeSut()
     const name = faker.internet.userName()
@@ -158,13 +180,22 @@ describe('Signup', () => {
 
   test('should show spinner on submit', async () => {
     const { sut } = makeSut()
-    await populateField(sut, 'name', faker.internet.userName())
-    await populateField(sut, 'email', faker.internet.email())
-    await populateField(sut, 'password', faker.internet.password())
-    await populateField(sut, 'passwordConfirmation', faker.internet.password())
-    const button = sut.find('button')
-    await button.trigger('submit')
+    await simulateSignupFormSubmit(sut)
     const spinner = sut.find('[data-test="spinner"]')
     expect(spinner.isVisible).toBeTruthy()
+  })
+
+  test('should call AddAccount with correct values', async () => {
+    const { sut, addAccountSpy } = makeSut()
+    const addAccountParams = mockAddAccount()
+
+    await simulateSignupFormSubmit(
+      sut,
+      addAccountParams.name,
+      addAccountParams.email,
+      addAccountParams.password,
+      addAccountParams.passwordConfirmation
+    )
+    expect(addAccountSpy.params).toEqual(addAccountParams)
   })
 })
