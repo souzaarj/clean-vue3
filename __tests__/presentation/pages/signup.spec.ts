@@ -121,4 +121,10 @@ describe('Signup', () => {
     await populateField(sut, 'passwordConfirmation', passwordConfirmation)
     simulateStatusField(sut, 'passwordConfirmation', validationError)
   })
+
+  test('should show valid name state if validation success', async () => {
+    const { sut } = makeSut()
+    await populateField(sut, 'name', faker.internet.userName())
+    simulateStatusField(sut, 'name')
+  })
 })
