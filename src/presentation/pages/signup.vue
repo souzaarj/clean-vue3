@@ -52,7 +52,8 @@
     FormStatus,
     Footer,
   } from '@/presentation/components'
-  import { Validation } from '../protocols/validation'
+  import { Validation } from '@/presentation/protocols/validation'
+  import { AddAccount } from '@/domain/usecases'
 
   export default defineComponent({
     name: 'Signup',
@@ -65,6 +66,10 @@
     props: {
       validation: {
         type: Object as PropType<Validation>,
+        required: true,
+      },
+      addAccount: {
+        type: Object as PropType<AddAccount>,
         required: true,
       },
     },
@@ -116,10 +121,17 @@
             props.validation.validate('passwordConfirmation', newValue) || '')
       )
 
-      const onSubmit = () => {
+      const onSubmit = async () => {
         if (isLoading.value || anyFieldError.value) return
 
         isLoading.value = true
+
+        await props.addAccount.add({
+          name: name.value,
+          email: email.value,
+          password: password.value,
+          passwordConfirmation: passwordConfirmation.value,
+        })
       }
 
       return {
