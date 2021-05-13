@@ -12,7 +12,7 @@ import {
 } from '@/tests/presentation/helper/form-helper'
 
 import { Signup } from '@/presentation/pages'
-import { mount, VueWrapper } from '@vue/test-utils'
+import { mount, VueWrapper, flushPromises } from '@vue/test-utils'
 import router from '@/presentation/router/router'
 import faker from 'faker'
 
@@ -225,5 +225,14 @@ describe('Signup', () => {
     const mainError = await sut.find('[data-test="main-error"]')
     expect(mainError.text()).toBe(error.message)
     expect(statusWrap.element.childElementCount).toBe(1)
+  })
+  test('should go to login page', async () => {
+    const { sut } = makeSut()
+    sut.vm.$router.push('/login')
+    await flushPromises()
+    expect(sut.vm.$route).toMatchObject({
+      name: 'Login',
+      path: '/login',
+    })
   })
 })
