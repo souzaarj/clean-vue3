@@ -1,5 +1,5 @@
+import { UnexpectedError } from '@/domain/errors/unexpected-error'
 import { SaveAccessTokenMock } from '@/tests/data/mocks/mock-storage'
-import { mockAccountModel } from '@/tests/domain/mocks/mock-account'
 import { EmailInUseError } from '@/domain/errors/email-in-use-error'
 import { mockAddAccount } from '@/tests/domain/mocks'
 import { AddAccountSpy } from '@/tests/domain/mocks/mock-account'
@@ -215,5 +215,15 @@ describe('Signup', () => {
     expect(sut.vm.$route).toMatchObject({
       path: '/',
     })
+  })
+  test('should present error if SaveAccessToken fails', async () => {
+    const { sut, saveAccessTokenMock } = makeSut()
+    const error = new UnexpectedError()
+    jest.spyOn(saveAccessTokenMock, 'save').mockRejectedValueOnce(error)
+    await simulateSignupFormSubmit(sut)
+    const statusWrap = await sut.find('[data-test="status-wrap"]')
+    const mainError = await sut.find('[data-test="main-error"]')
+    expect(mainError.text()).toBe(error.message)
+    expect(statusWrap.element.childElementCount).toBe(1)
   })
 })

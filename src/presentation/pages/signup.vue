@@ -140,7 +140,7 @@
             passwordConfirmation: passwordConfirmation.value,
           })
 
-          props.saveToken.save(account.accessToken)
+          await props.saveToken.save(account.accessToken)
           route.push('/')
         } catch (error) {
           isLoading.value = false
