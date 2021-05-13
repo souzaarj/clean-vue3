@@ -1,9 +1,9 @@
+import { SaveAccessTokenMock } from '@/tests/data/mocks/mock-storage'
 import {
   simulateStatusField,
   testFieldStatus,
   populateField,
 } from '@/tests/presentation/helper/form-helper'
-import { SaveAccessToken } from '@/domain/usecases/save-access-token'
 import router from '@/presentation/router/router'
 import { InvalidCredentialError } from '@/domain/errors/invalid-credential-error'
 import { Login } from '@/presentation/pages'
@@ -11,13 +11,6 @@ import { mount, VueWrapper, flushPromises } from '@vue/test-utils'
 import { testFieldChildCount, ValidationSpy } from '@/tests/presentation/mocks'
 import { AuthenticationSpy } from '@/tests/domain/mocks'
 import faker from 'faker'
-
-class SaveAccessTokenMock implements SaveAccessToken {
-  accessToken: string
-  async save(accessToken: string): Promise<void> {
-    this.accessToken = accessToken
-  }
-}
 
 type SutTypes = {
   sut: VueWrapper<any>

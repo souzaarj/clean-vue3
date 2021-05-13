@@ -1,5 +1,6 @@
-import { EmailInUseError } from './../../../src/domain/errors/email-in-use-error'
-import { UnexpectedError } from '@/domain/errors'
+import { SaveAccessTokenMock } from '@/tests/data/mocks/mock-storage'
+import { mockAccountModel } from '@/tests/domain/mocks/mock-account'
+import { EmailInUseError } from '@/domain/errors/email-in-use-error'
 import { mockAddAccount } from '@/tests/domain/mocks'
 import { AddAccountSpy } from '@/tests/domain/mocks/mock-account'
 import { ValidationSpy } from '@/tests/presentation/mocks'
@@ -19,6 +20,7 @@ type SutTypes = {
   sut: VueWrapper<any>
   validationSpy: ValidationSpy
   addAccountSpy: AddAccountSpy
+  saveAccessTokenMock: SaveAccessTokenMock
 }
 type SutParams = {
   validationError: string
@@ -27,8 +29,12 @@ type SutParams = {
 const makeSut = (paramError?: SutParams): SutTypes => {
   const validationSpy = new ValidationSpy()
   const addAccountSpy = new AddAccountSpy()
-
-  const props = { validation: validationSpy, addAccount: addAccountSpy }
+  const saveAccessTokenMock = new SaveAccessTokenMock()
+  const props = {
+    validation: validationSpy,
+    addAccount: addAccountSpy,
+    saveToken: saveAccessTokenMock,
+  }
   validationSpy.errorMessage = paramError?.validationError || ''
   const sut = mount(Signup, {
     props,
@@ -36,7 +42,7 @@ const makeSut = (paramError?: SutParams): SutTypes => {
       plugins: [router],
     },
   })
-  return { sut, validationSpy, addAccountSpy }
+  return { sut, validationSpy, addAccountSpy, saveAccessTokenMock }
 }
 
 const simulateSignupFormSubmit = async (
@@ -69,7 +75,6 @@ describe('Signup', () => {
     await testFieldStatus(sut, 'password', validationError, '🔴')
     await testFieldStatus(sut, 'passwordConfirmation', validationError, '🔴')
   })
-
   test('should call Validation with correct name', async () => {
     const { sut, validationSpy } = makeSut()
     const name = faker.internet.userName()
@@ -78,7 +83,6 @@ describe('Signup', () => {
     expect(validationSpy.fieldName).toBe('name')
     expect(validationSpy.fieldValue).toBe(name)
   })
-
   test('should call Validation with correct email', async () => {
     const { sut, validationSpy } = makeSut()
     const email = faker.internet.email()
@@ -201,5 +205,15 @@ describe('Signup', () => {
     const mainError = sut.find('[data-test="main-error"]')
     expect(mainError.text()).toBe(error.message)
     expect(statusWrap.element.childElementCount).toBe(1)
+  })
+  test('should call SaveAccessToken on success ', async () => {
+    const { sut, addAccountSpy, saveAccessTokenMock } = makeSut()
+    await simulateSignupFormSubmit(sut)
+    expect(saveAccessTokenMock.accessToken).toBe(
+      addAccountSpy.account.accessToken
+    )
+    expect(sut.vm.$route).toMatchObject({
+      path: '/',
+    })
   })
 })
