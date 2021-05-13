@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-  import { ref, defineComponent, computed, provide, PropType, watch } from 'vue'
+  import { ref, defineComponent, computed, PropType, watch } from 'vue'
   import { Validation } from '@/presentation/protocols/validation'
   import { Authentication } from '@/domain/usecases/authentication'
   import {

@@ -53,7 +53,8 @@
     Footer,
   } from '@/presentation/components'
   import { Validation } from '@/presentation/protocols/validation'
-  import { AddAccount } from '@/domain/usecases'
+  import { AddAccount, SaveAccessToken } from '@/domain/usecases'
+  import { useRouter } from 'vue-router'
 
   export default defineComponent({
     name: 'Signup',
@@ -72,6 +73,10 @@
         type: Object as PropType<AddAccount>,
         required: true,
       },
+      saveToken: {
+        type: Object as PropType<SaveAccessToken>,
+        required: true,
+      },
     },
 
     setup(props) {
@@ -85,6 +90,7 @@
       const emailError = ref('Campo obrigatório')
       const passwordError = ref('Campo obrigatório')
       const passwordConfirmationError = ref('Campo obrigatório')
+      const route = useRouter()
       const anyFieldError = computed(
         () =>
           !!nameError.value ||
@@ -127,12 +133,15 @@
 
           isLoading.value = true
 
-          await props.addAccount.add({
+          const account = await props.addAccount.add({
             name: name.value,
             email: email.value,
             password: password.value,
             passwordConfirmation: passwordConfirmation.value,
           })
+
+          props.saveToken.save(account.accessToken)
+          route.push('/')
         } catch (error) {
           isLoading.value = false
           mainError.value = error.message
