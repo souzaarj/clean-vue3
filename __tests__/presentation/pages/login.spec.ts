@@ -2,12 +2,12 @@ import {
   simulateStatusField,
   testFieldStatus,
   populateField,
-} from '@/tests/presentation/helper/test-helper'
+} from '@/tests/presentation/helper/form-helper'
 import { SaveAccessToken } from '@/domain/usecases/save-access-token'
 import router from '@/presentation/router/router'
 import { InvalidCredentialError } from '@/domain/errors/invalid-credential-error'
 import { Login } from '@/presentation/pages'
-import { mount, VueWrapper, flushPromises, config } from '@vue/test-utils'
+import { mount, VueWrapper, flushPromises } from '@vue/test-utils'
 import { testFieldChildCount, ValidationSpy } from '@/tests/presentation/mocks'
 import { AuthenticationSpy } from '@/tests/domain/mocks'
 import faker from 'faker'
@@ -71,8 +71,8 @@ describe('Login', () => {
     const submitButton = await sut.find('button')
     expect(submitButton.element.disabled).toBeTruthy()
 
-    testFieldStatus(sut, 'email-status', 'Campo obrigatório', '🔴')
-    testFieldStatus(sut, 'password-status', 'Campo obrigatório', '🔴')
+    await testFieldStatus(sut, 'email', 'Campo obrigatório', '🔴')
+    await testFieldStatus(sut, 'password', 'Campo obrigatório', '🔴')
   })
 
   test('should call validation with correct email', async () => {

@@ -26,7 +26,8 @@ export const testFieldStatus = (
   title: string,
   text: string
 ): void => {
-  const fieldStatus = sut.find(`[data-test="${field}"]`)
+  const fieldStatus = sut.find(`[data-test=${field}-status]`)
+
   expect(fieldStatus.attributes('title')).toBe(title)
   expect(fieldStatus.text()).toBe(text)
 }

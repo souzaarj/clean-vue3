@@ -122,16 +122,21 @@
       )
 
       const onSubmit = async () => {
-        if (isLoading.value || anyFieldError.value) return
+        try {
+          if (isLoading.value) return
 
-        isLoading.value = true
+          isLoading.value = true
 
-        await props.addAccount.add({
-          name: name.value,
-          email: email.value,
-          password: password.value,
-          passwordConfirmation: passwordConfirmation.value,
-        })
+          await props.addAccount.add({
+            name: name.value,
+            email: email.value,
+            password: password.value,
+            passwordConfirmation: passwordConfirmation.value,
+          })
+        } catch (error) {
+          isLoading.value = false
+          mainError.value = error.message
+        }
       }
 
       return {

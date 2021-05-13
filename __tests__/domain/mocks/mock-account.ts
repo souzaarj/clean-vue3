@@ -1,4 +1,4 @@
-import { AddAccount } from './../../../src/domain/usecases/add-account'
+import { AddAccount } from '@/domain/usecases/add-account'
 import { AddAccountParams } from '@/domain/usecases'
 import { AccountModel } from '@/domain/models/account-model'
 import { AuthenticationParams } from '@/domain/usecases/authentication'
@@ -26,6 +26,7 @@ export class AddAccountSpy implements AddAccount {
   callsCount = 0
   async add(params: AddAccountParams): Promise<AccountModel> {
     this.callsCount++
+
     this.params = params
     return this.result
   }

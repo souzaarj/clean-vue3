@@ -1,16 +1,13 @@
-import { AddAccount } from './../../../src/domain/usecases/add-account'
+import { UnexpectedError } from '@/domain/errors'
 import { mockAddAccount } from '@/tests/domain/mocks'
-import { AddAccountSpy } from './../../domain/mocks/mock-account'
+import { AddAccountSpy } from '@/tests/domain/mocks/mock-account'
 import { ValidationSpy } from '@/tests/presentation/mocks'
-import {
-  populateField,
-  simulateStatusField,
-} from '@/tests/presentation/helper/test-helper'
+import { populateField, simulateStatusField } from '@/tests/presentation/helper'
 
 import {
   testFieldStatus,
   testFieldChildCount,
-} from '@/tests/presentation/helper/test-helper'
+} from '@/tests/presentation/helper/form-helper'
 
 import { Signup } from '@/presentation/pages'
 import { mount, VueWrapper } from '@vue/test-utils'
@@ -57,24 +54,19 @@ const simulateSignupFormSubmit = async (
 }
 
 describe('Signup', () => {
-  test('should start with initial state', () => {
+  test('should start with initial state', async () => {
     router.isReady()
     const { sut } = makeSut()
 
+    const validationError = 'Campo obrigatório'
     testFieldChildCount(sut, 'status-wrap', 0)
 
     const button = sut.find('button')
     expect(button.element.disabled).toBeTruthy()
-
-    testFieldStatus(sut, 'name-status', 'Campo obrigatório', '🔴')
-    testFieldStatus(sut, 'email-status', 'Campo obrigatório', '🔴')
-    testFieldStatus(sut, 'password-status', 'Campo obrigatório', '🔴')
-    testFieldStatus(
-      sut,
-      'passwordConfirmation-status',
-      'Campo obrigatório',
-      '🔴'
-    )
+    await testFieldStatus(sut, 'name', validationError, '🔴')
+    await testFieldStatus(sut, 'email', validationError, '🔴')
+    await testFieldStatus(sut, 'password', validationError, '🔴')
+    await testFieldStatus(sut, 'passwordConfirmation', validationError, '🔴')
   })
 
   test('should call Validation with correct name', async () => {
@@ -205,5 +197,25 @@ describe('Signup', () => {
     await simulateSignupFormSubmit(sut)
     await simulateSignupFormSubmit(sut)
     expect(addAccountSpy.callsCount).toBe(1)
+  })
+
+  test('should not call AddAccount if form is invalid', async () => {
+    const validationError = faker.random.words()
+    const { sut, addAccountSpy } = makeSut({ validationError })
+    await populateField(sut, 'name', faker.internet.userName())
+    const button = sut.find('button')
+    await button.trigger('submit')
+    expect(addAccountSpy.callsCount).toBe(0)
+  })
+
+  test('should present error if AddAccount fails', async () => {
+    const { sut, addAccountSpy } = makeSut()
+    const error = new UnexpectedError()
+    jest.spyOn(addAccountSpy, 'add').mockRejectedValueOnce(error)
+    await simulateSignupFormSubmit(sut)
+    const statusWrap = sut.find('[data-test="status-wrap"]')
+    const mainError = sut.find('[data-test="main-error"]')
+    expect(mainError.text()).toBe(error.message)
+    expect(statusWrap.element.childElementCount).toBe(1)
   })
 })
