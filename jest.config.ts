@@ -4,7 +4,7 @@ const esModules = ['@vue/test-utils'].join('|')
 
 const config: Config.InitialOptions = {
   verbose: true,
-  roots: ['<rootDir>/__tests__', '<rootDir>/src'],
+  roots: ['<rootDir>/tests', '<rootDir>/src'],
   collectCoverageFrom: [
     '<rootDir>/src/**/*.ts',
     '!<rootDir>/src/main/**/*',
@@ -22,12 +22,12 @@ const config: Config.InitialOptions = {
   },
   transformIgnorePatterns: [`/node_modules/(?!${esModules})`],
   moduleNameMapper: {
-    '@/tests/(.*)$': '<rootDir>/__tests__/$1',
+    '@/tests/(.*)$': '<rootDir>/tests/$1',
     '^@/(.*)$': '<rootDir>/src/$1',
     '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
   },
   testMatch: [
-    '**/__tests__/**/*.(test|spec).(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)',
+    '**/tests/**/*.(test|spec).(js|jsx|ts|tsx)|**/tests/*.(js|jsx|ts|tsx)',
   ],
 }
 

@@ -1,4 +1,4 @@
-import { mockAccountModel } from './../../domain/mocks/mock-account'
+import { mockAccountModel } from '@/tests/domain/mocks'
 import { EmailInUseError, UnexpectedError } from '@/domain/errors'
 import { HttpStatusCode } from '@/data/protocols/http-response'
 import { AccountModel } from '@/domain/models/account-model'

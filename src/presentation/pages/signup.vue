@@ -75,15 +75,15 @@
     },
 
     setup(props) {
-      const mainError = ref('')
       const isLoading = ref(false)
       const name = ref('')
       const email = ref('')
       const password = ref('')
       const passwordConfirmation = ref('')
+      const mainError = ref('')
       const nameError = ref('Campo obrigatório')
-      const passwordError = ref('Campo obrigatório')
       const emailError = ref('Campo obrigatório')
+      const passwordError = ref('Campo obrigatório')
       const passwordConfirmationError = ref('Campo obrigatório')
       const anyFieldError = computed(
         () =>
@@ -123,7 +123,7 @@
 
       const onSubmit = async () => {
         try {
-          if (isLoading.value) return
+          if (isLoading.value || anyFieldError.value) return
 
           isLoading.value = true
 

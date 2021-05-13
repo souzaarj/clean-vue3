@@ -1,3 +1,4 @@
+import { EmailInUseError } from './../../../src/domain/errors/email-in-use-error'
 import { UnexpectedError } from '@/domain/errors'
 import { mockAddAccount } from '@/tests/domain/mocks'
 import { AddAccountSpy } from '@/tests/domain/mocks/mock-account'
@@ -43,13 +44,13 @@ const simulateSignupFormSubmit = async (
   name = faker.internet.userName(),
   email = faker.internet.email(),
   password = faker.internet.password(),
-  passwordConfirmation = faker.internet.password()
+  passwordConfirmation = password
 ): Promise<void> => {
   await populateField(sut, 'name', name)
   await populateField(sut, 'email', email)
   await populateField(sut, 'password', password)
   await populateField(sut, 'passwordConfirmation', passwordConfirmation)
-  const button = sut.find('button')
+  const button = await sut.find('button')
   await button.trigger('submit')
 }
 
@@ -94,7 +95,6 @@ describe('Signup', () => {
     expect(validationSpy.fieldName).toBe('password')
     expect(validationSpy.fieldValue).toBe(password)
   })
-
   test('should call Validation with correct passwordConfirmation', async () => {
     const { sut, validationSpy } = makeSut()
     const passwordConfirmation = faker.internet.userName()
@@ -103,7 +103,6 @@ describe('Signup', () => {
     expect(validationSpy.fieldName).toBe('passwordConfirmation')
     expect(validationSpy.fieldValue).toBe(passwordConfirmation)
   })
-
   test('should show name error if validation fails', async () => {
     const validationError = faker.random.words()
     const { sut } = makeSut({ validationError })
@@ -111,7 +110,6 @@ describe('Signup', () => {
     await populateField(sut, 'name', name)
     simulateStatusField(sut, 'name', validationError)
   })
-
   test('should show email error if validation fails', async () => {
     const validationError = faker.random.words()
     const { sut } = makeSut({ validationError })
@@ -119,7 +117,6 @@ describe('Signup', () => {
     await populateField(sut, 'email', email)
     simulateStatusField(sut, 'email', validationError)
   })
-
   test('should show password error if validation fails', async () => {
     const validationError = faker.random.words()
     const { sut } = makeSut({ validationError })
@@ -127,7 +124,6 @@ describe('Signup', () => {
     await populateField(sut, 'password', password)
     simulateStatusField(sut, 'password', validationError)
   })
-
   test('should show passwordConfirmation error if validation fails', async () => {
     const validationError = faker.random.words()
     const { sut } = makeSut({ validationError })
@@ -135,31 +131,26 @@ describe('Signup', () => {
     await populateField(sut, 'passwordConfirmation', passwordConfirmation)
     simulateStatusField(sut, 'passwordConfirmation', validationError)
   })
-
   test('should show valid name state if validation success', async () => {
     const { sut } = makeSut()
     await populateField(sut, 'name', faker.internet.userName())
     simulateStatusField(sut, 'name')
   })
-
   test('should show valid email state if validation success', async () => {
     const { sut } = makeSut()
     await populateField(sut, 'email', faker.internet.email())
     simulateStatusField(sut, 'email')
   })
-
   test('should show valid password state if validation success', async () => {
     const { sut } = makeSut()
     await populateField(sut, 'password', faker.internet.password())
     simulateStatusField(sut, 'password')
   })
-
   test('should show valid passwordConfirmation state if validation success', async () => {
     const { sut } = makeSut()
     await populateField(sut, 'passwordConfirmation', faker.internet.password())
     simulateStatusField(sut, 'passwordConfirmation')
   })
-
   test('should enable submit button if form is valid', async () => {
     const { sut } = makeSut()
     await populateField(sut, 'name', faker.internet.userName())
@@ -169,14 +160,12 @@ describe('Signup', () => {
     const button = sut.find('button')
     expect(button.element.disabled).toBeFalsy()
   })
-
   test('should show spinner on submit', async () => {
     const { sut } = makeSut()
     await simulateSignupFormSubmit(sut)
     const spinner = sut.find('[data-test="spinner"]')
     expect(spinner.isVisible).toBeTruthy()
   })
-
   test('should call AddAccount with correct values', async () => {
     const { sut, addAccountSpy } = makeSut()
     const addAccountParams = mockAddAccount()
@@ -190,7 +179,6 @@ describe('Signup', () => {
     )
     expect(addAccountSpy.params).toEqual(addAccountParams)
   })
-
   test('should call AddAccount only once', async () => {
     const { sut, addAccountSpy } = makeSut()
 
@@ -198,19 +186,15 @@ describe('Signup', () => {
     await simulateSignupFormSubmit(sut)
     expect(addAccountSpy.callsCount).toBe(1)
   })
-
   test('should not call AddAccount if form is invalid', async () => {
     const validationError = faker.random.words()
     const { sut, addAccountSpy } = makeSut({ validationError })
-    await populateField(sut, 'name', faker.internet.userName())
-    const button = sut.find('button')
-    await button.trigger('submit')
+    await simulateSignupFormSubmit(sut)
     expect(addAccountSpy.callsCount).toBe(0)
   })
-
   test('should present error if AddAccount fails', async () => {
     const { sut, addAccountSpy } = makeSut()
-    const error = new UnexpectedError()
+    const error = new EmailInUseError()
     jest.spyOn(addAccountSpy, 'add').mockRejectedValueOnce(error)
     await simulateSignupFormSubmit(sut)
     const statusWrap = sut.find('[data-test="status-wrap"]')
