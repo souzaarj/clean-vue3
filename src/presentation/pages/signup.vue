@@ -91,14 +91,14 @@
       const passwordError = ref('Campo obrigatório')
       const passwordConfirmationError = ref('Campo obrigatório')
       const route = useRouter()
-      const anyFieldError = computed(
+      const isFormInvalid = computed(
         () =>
           !!nameError.value ||
           !!emailError.value ||
           !!passwordError.value ||
           !!passwordConfirmationError.value
       )
-      const buttonIsDisabled = computed(() => anyFieldError.value)
+      const buttonIsDisabled = computed(() => isFormInvalid.value)
 
       watch(
         name,
@@ -129,7 +129,7 @@
 
       const onSubmit = async () => {
         try {
-          if (isLoading.value || anyFieldError.value) return
+          if (isLoading.value || isFormInvalid.value) return
 
           isLoading.value = true
 
