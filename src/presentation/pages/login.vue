@@ -68,10 +68,11 @@
     setup(props) {
       const mainError = ref('')
       const isLoading = ref(false)
-      const emailError = ref('Campo obrigatório')
-      const passwordError = ref('Campo obrigatório')
       const email = ref('')
       const password = ref('')
+      const emailError = ref('Campo obrigatório')
+      const passwordError = ref('Campo obrigatório')
+
       const buttonIsDisabled = computed(
         () => !!emailError.value || !!passwordError.value
       )
@@ -81,14 +82,14 @@
         email,
         (newValue) =>
           (emailError.value =
-            props.validation.validate('email', newValue) || '')
+            props.validation.validate('email', { email: newValue }) || '')
       )
 
       watch(
         password,
         (newValue) =>
           (passwordError.value =
-            props.validation.validate('password', newValue) || '')
+            props.validation.validate('password', { password: newValue }) || '')
       )
 
       const onSubmit = async (): Promise<void> => {

@@ -9,7 +9,7 @@
 <script>
   import { defineComponent } from 'vue'
   import { Login } from '@/presentation/pages'
-  import { makeLoginValidation } from '@/main/factories/pages/login-validation-factory'
+  import { makeLoginValidation } from '@/main/factories/pages/login/login-validation-factory'
   import {
     makeRemoteAuthentication,
     makeLocalSaveAccessToken,

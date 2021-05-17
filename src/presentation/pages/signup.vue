@@ -46,12 +46,14 @@
 
 <script lang="ts">
   import { ref, defineComponent, computed, PropType, watch } from 'vue'
+
   import {
     LoginHeader as Header,
     Input,
     FormStatus,
     Footer,
   } from '@/presentation/components'
+
   import { Validation } from '@/presentation/protocols/validation'
   import { AddAccount, SaveAccessToken } from '@/domain/usecases'
   import { useRouter } from 'vue-router'
@@ -73,24 +75,35 @@
         type: Object as PropType<AddAccount>,
         required: true,
       },
-      saveToken: {
+      saveAccessToken: {
         type: Object as PropType<SaveAccessToken>,
         required: true,
       },
     },
 
     setup(props) {
+      const mainError = ref('')
       const isLoading = ref(false)
       const name = ref('')
       const email = ref('')
       const password = ref('')
       const passwordConfirmation = ref('')
-      const mainError = ref('')
+
       const nameError = ref('Campo obrigatório')
       const emailError = ref('Campo obrigatório')
       const passwordError = ref('Campo obrigatório')
       const passwordConfirmationError = ref('Campo obrigatório')
+
       const route = useRouter()
+
+      const formData = computed(() => ({
+        name: name.value,
+        email: email.value,
+        password: password.value,
+        passwordConfirmation: passwordConfirmation.value,
+      }))
+
+      const buttonIsDisabled = computed(() => isFormInvalid.value)
       const isFormInvalid = computed(
         () =>
           !!nameError.value ||
@@ -98,34 +111,33 @@
           !!passwordError.value ||
           !!passwordConfirmationError.value
       )
-      const buttonIsDisabled = computed(() => isFormInvalid.value)
 
       watch(
         name,
-        (newValue) =>
-          (nameError.value = props.validation.validate('name', newValue) || '')
+        () =>
+          (nameError.value =
+            props.validation.validate('name', formData.value) || '')
       )
 
       watch(
         email,
-        (newValue) =>
+        () =>
           (emailError.value =
-            props.validation.validate('email', newValue) || '')
+            props.validation.validate('email', formData.value) || '')
       )
 
       watch(
         password,
-        (newValue) =>
+        () =>
           (passwordError.value =
-            props.validation.validate('password', newValue) || '')
+            props.validation.validate('password', formData.value) || '')
       )
 
-      watch(
-        passwordConfirmation,
-        (newValue) =>
-          (passwordConfirmationError.value =
-            props.validation.validate('passwordConfirmation', newValue) || '')
-      )
+      watch(passwordConfirmation, () => {
+        passwordConfirmationError.value =
+          props.validation.validate('passwordConfirmation', formData.value) ||
+          ''
+      })
 
       const onSubmit = async () => {
         try {
@@ -140,18 +152,23 @@
             passwordConfirmation: passwordConfirmation.value,
           })
 
-          await props.saveToken.save(account.accessToken)
+          await props.saveAccessToken.save(account.accessToken)
           route.push('/')
         } catch (error) {
           isLoading.value = false
           mainError.value = error.message
+
+          name.value = ''
+          email.value = ''
+          password.value = ''
+          passwordConfirmation.value = ''
         }
       }
 
       return {
+        name,
         email,
         password,
-        name,
         passwordConfirmation,
         nameError,
         emailError,

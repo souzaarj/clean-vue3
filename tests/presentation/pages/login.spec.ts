@@ -73,7 +73,7 @@ describe('Login', () => {
     const email = faker.internet.email()
     await populateField(sut, 'email', email)
     expect(validationSpy.fieldName).toBe('email')
-    expect(validationSpy.fieldValue).toBe(email)
+    expect(validationSpy.input).toEqual({ email })
   })
 
   test('should call validation with correct password', async () => {
@@ -81,7 +81,7 @@ describe('Login', () => {
     const password = faker.internet.email()
     await populateField(sut, 'password', password)
     expect(validationSpy.fieldName).toBe('password')
-    expect(validationSpy.fieldValue).toBe(password)
+    expect(validationSpy.input).toEqual({ password })
   })
 
   test('should show email error if validation fails', async () => {

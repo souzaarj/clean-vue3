@@ -1,2 +1,2 @@
-export * from './remoteAuthentication-factory'
+export * from './remote-authentication-factory'
 export * from './local-save-access-token'

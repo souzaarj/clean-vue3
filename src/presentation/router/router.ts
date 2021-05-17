@@ -1,6 +1,6 @@
 import { createWebHistory, createRouter } from 'vue-router'
-import MakeLogin from '@/main/factories/pages/login-factory.vue'
-import { Signup } from '@/presentation/pages'
+import MakeLogin from '@/main/factories/pages/login/login-factory.vue'
+import MakeSignup from '@/main/factories/pages/signup/signup-factory.vue'
 
 export const routes = [
   {
@@ -11,16 +11,16 @@ export const routes = [
   {
     path: '/signup',
     name: 'signup',
-    component: Signup,
+    component: MakeSignup,
   },
   {
     path: '/',
     name: 'main',
-    component: Signup,
+    component: MakeSignup,
   },
   {
     path: '/:pathMatch(.*)*',
-    redirect: '/login',
+    redirect: '/',
   },
 ]
 

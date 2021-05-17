@@ -37,5 +37,6 @@ export const populateField = async (
   field: string,
   value: string
 ): Promise<void> => {
-  await sut.find(`input[name=${field}]`).setValue(value)
+  const input = sut.find(`input[name=${field}]`)
+  await input.setValue(value)
 }
